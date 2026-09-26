@@ -56,8 +56,9 @@
     <footer>
       <div class="wrap">
         <div>
-          <div class="f-brand"><img src="assets/logo.png" alt="defiro" width="130" height="40"></div>
+          <div class="f-brand"><img src="assets/logo-branco.png" alt="defiro" width="130" height="45"></div>
           <p class="f-note">A workflow automation platform, adaptable to any scenario. Projeto em Engenharia Informática, Universidade de Aveiro.</p>
+          <p class="f-note">PEI 2026/27 · Universidade de Aveiro</p>
         </div>
         <div><h4>Project advisors</h4><ul>${(D.advisors || []).map((a) => `<li><a href="${esc(a.url)}" target="_blank" rel="noopener noreferrer">${esc(a.name)}</a></li>`).join("")}</ul></div>
         <div><h4>Project</h4><ul><li><a href="team.html">Team members</a></li><li><a href="calendar.html">Calendar</a></li><li><a href="reports.html">Reports</a></li></ul></div>
