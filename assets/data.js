@@ -10,78 +10,104 @@ window.DEFIRO = {
   // embeddable URL (Google Slides "publish to web", OneDrive embed, PDF…). Empty = not yet published.
   milestones: [
     {
-      id: "m1", name: "Inception", dates: "Oct 2026", due: "[[2026-10-28?]]",
+      id: "m1", name: "Inception", dates: "15 Sep – 29 Sep 2026", due: "2026-09-29",
       goal: "Understand what to build: vision, scope, stakeholders, key requirements and the project plan.",
       slides: "", report: "",
       calendar: [
-        { when: "[[01/10 – 14/10]]", tasks: [
-          "Project website (Duarte)",
-          "GitHub organisation and repository (Dinis)",
-          "Stakeholder interviews (Everyone)",
-          "State of the art and related work (Bernardo, [[+1?]])",
-        ] },
-        { when: "[[15/10 – 28/10]]", tasks: [
-          "Requirements, actors and use cases (Everyone)",
-          "Project calendar and communication plan (Duarte)",
-          "User stories ([[who?]])",
-          "M1 presentation (Everyone)",
-        ] },
+        { when: "15/09 – 29/09", modules: [
+          { name: "Project Planning", tasks: [
+            "Project website (Duarte)",
+            "GitHub organisation",
+            "GitHub project",
+            "State of the art and context (Pedro)",
+            "Project calendar (Daniel)",
+            "Presentation (Bernardo)",
+          ] },
+        ], deliverables: ["Project calendar", "Project website", "M1 presentation"] },
       ],
     },
     {
-      id: "m2", name: "Elaboration", dates: "Early Nov 2026", due: "[[date TBD]]",
+      id: "m2", name: "Elaboration", dates: "30 Sep – 13 Oct 2026", due: "2026-10-13",
       goal: "Settle the architecture and remove the biggest technical risks with a prototype.",
       slides: "", report: "",
       calendar: [
-        { when: "[[01/11 – 14/11]]", tasks: [
-          "System architecture (Pedro, Dinis)",
-          "Supported UML subset and its mapping to states (Bernardo)",
-          "Wireframes and mockups (Duarte)",
-          "Entra ID sign-in spike (Daniel)",
-          "M2 presentation (Everyone)",
+        { when: "30/09 – 06/10", modules: [
+          { name: "Requirements Elicitation", tasks: [
+            "Requirements gathering",
+            "User stories",
+            "Functional requirements",
+            "Non-functional requirements",
+            "Identify stakeholders & goals",
+            "Map manual procedures (CMA context)",
+          ] },
+        ] },
+        { when: "07/10 – 13/10", modules: [
+          { name: "System Architecture & Mock-ups", tasks: [
+            "Architecture design",
+            "Design mockups",
+            "Database diagrams",
+            "Presentation",
+          ] },
         ] },
       ],
     },
     {
-      id: "m3", name: "Construction", dates: "Mid Nov 2026 – Mar 2027", due: "[[date TBD]]",
-      goal: "Build in iterations: an MVP in December, then the full platform and a second workflow.",
+      id: "m3", name: "Construction", dates: "14 Oct – 3 Nov 2026", due: "2026-11-03",
+      goal: "Build the core of the platform: workflow designer, lifecycle engine, forms and documents.",
       slides: "", report: "",
       calendar: [
-        { when: "[[15/11 – 18/12]]", tasks: [
-          "MVP: workflow engine (Pedro)",
-          "MVP: Entra ID single sign-on (Daniel)",
-          "MVP: task inbox (Duarte)",
-          "CI/CD and environments (Dinis)",
-          "First workflow running end to end (Everyone)",
+        { when: "14/10 – 20/10", modules: [
+          { name: "Workflow Designer", tasks: [
+            "UML diagram import & parsing",
+            "Diagram validation",
+          ] },
         ] },
-        { when: "[[Jan – Feb]]", tasks: [
-          "Visual workflow designer (Bernardo)",
-          "Generated forms and documents (Bernardo, Pedro)",
-          "Notifications and dashboard (Duarte)",
-          "Export to accounting (Daniel)",
+        { when: "21/10 – 27/10", modules: [
+          { name: "Procedure & Document Lifecycle Engine", tasks: [
+            "State transition engine",
+            "Task assignment & deadlines",
+            "Audit trail / history",
+          ] },
         ] },
-        { when: "[[March]]", tasks: [
-          "Second workflow built only in the designer (Everyone)",
-          "Usability and performance (Everyone)",
-          "M3 presentation (Everyone)",
+        { when: "28/10 – 03/11", modules: [
+          { name: "Dynamic Forms & Documents", tasks: [
+            "Form generation from model",
+            "Document generation & export",
+            "Presentation",
+          ] },
         ] },
       ],
     },
     {
-      id: "m4", name: "Transition", dates: "Apr – May 2027", due: "[[date TBD]]",
-      goal: "Validate with real users, deploy and hand the platform over.",
+      id: "m4", name: "Transition", dates: "4 Nov – 15 Dec 2026", due: "2026-12-15",
+      goal: "Integrate, validate with real users and hand the platform over.",
       slides: "", report: "",
       calendar: [
-        { when: "[[April]]", tasks: [
-          "Unit, integration and acceptance tests (Dinis)",
-          "User testing (Everyone)",
-          "Apply improvements (Everyone)",
+        { when: "04/11 – 10/11", modules: [
+          { name: "Identity & Access Integration", tasks: [
+            "SSO (Entra ID) integration",
+            "Role & org-unit mapping",
+            "Approver delegation",
+          ] },
+          { name: "Inbox, Notifications & Dashboard", tasks: [
+            "Task inbox",
+            "Notifications (email/in-app)",
+            "Metrics & dashboard",
+          ] },
         ] },
-        { when: "[[May]]", tasks: [
-          "Deployment (Dinis)",
-          "Documentation and training material (Everyone)",
-          "Final report and presentation (Everyone)",
-          "Students@DETI: demo, poster, video [[date]]",
+        { when: "11/11 – 17/11", modules: [
+          { name: "Integration", tasks: [
+            "Connect Designer output → Lifecycle Engine",
+            "Connect Engine → Dynamic Forms",
+            "End-to-end smoke test with dummy procedure",
+          ] },
+        ] },
+        { when: "19/11 – 24/11", tasks: ["User testing", "Stabilise final product"] },
+        { when: "25/11 – 01/12", tasks: ["Create documentation"] },
+        { when: "02/12 – 08/12", tasks: ["Prepare final presentation"] },
+        { when: "09/12 – 15/12", tasks: [
+          "Students@DETI: demo, poster, video",
+          "Prepare technical report",
         ] },
       ],
     },
@@ -90,7 +116,7 @@ window.DEFIRO = {
   // Written reports (reports.html). Presentations come from `milestones` above.
   reports: [
     { title: "Project proposal", ms: "M1", date: "2026-09-24", url: "" },
-    { title: "Project calendar & communication plan", ms: "M1", date: "[[2026-10-28?]]", url: "" },
+    { title: "Project calendar & communication plan", ms: "M1", date: "2026-09-29", url: "" },
     { title: "Vision & requirements", ms: "M1", date: "[[date TBD]]", url: "" },
     { title: "Architecture & design", ms: "M2", date: "[[date TBD]]", url: "" },
     { title: "Test & validation report", ms: "M4", date: "[[date TBD]]", url: "" },

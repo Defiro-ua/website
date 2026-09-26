@@ -154,10 +154,13 @@ p { margin: 0; }
 .cal { width: 100%; border-collapse: collapse; }
 .cal th { text-align: left; font-size: 14px; font-weight: 600; padding: 14px 16px; border-bottom: 1px solid var(--line); }
 .cal td { vertical-align: top; padding: 18px 16px; border-bottom: 1px solid var(--line); font-size: 15px; color: var(--ink-2); }
-.cal td:first-child { width: 22%; }
-.cal td:nth-child(2) { width: 20%; white-space: nowrap; color: var(--ink-3); }
+.cal td:first-child { width: 18%; }
+.cal td:nth-child(2) { width: 16%; white-space: nowrap; color: var(--ink-3); }
 .cal td a { color: var(--ink); font-weight: 600; text-underline-offset: 4px; }
 .cal ul { margin: 0; padding-left: 18px; display: grid; gap: 2px; }
+.cal td:nth-child(4) { width: 20%; }
+.cal-mod { color: var(--ink); font-weight: 600; margin: 0 0 4px; }
+.cal-mod ~ .cal-mod { margin-top: 10px; }
 .cal tr.first td { border-top: 1px solid var(--line); }
 @media (max-width: 700px) {
   .cal thead { display: none; }
