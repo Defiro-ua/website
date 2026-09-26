@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>if(!/\/$|\.html$/.test(location.pathname))location.replace(location.pathname+"/"+location.search+location.hash)</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team area | defiro</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>try{var t=localStorage.getItem("defiro-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body data-page="private">
+<a class="skip" href="#main">Skip to content</a>
+<div id="site-header"></div>
+
+<main id="main">
+  <div class="page-title wrap">
+    <h1>Team <span class="hl">Area</span></h1>
+    <p>Meeting minutes and private information for the team, advisors and course instructor.</p>
+  </div>
+  <div class="gate" id="gate">
+    <form class="gate-card" id="gateForm" novalidate>
+      <p>The content is encrypted and only readable with the team password.</p>
+      <div class="field">
+        <label for="pw">Team password</label>
+        <input id="pw" name="pw" type="password" autocomplete="current-password" required aria-describedby="pwErr">
+        <div class="err" id="pwErr" role="alert"></div>
+      </div>
+      <button class="btn btn-primary" type="submit" id="unlockBtn">Unlock</button>
+    </form>
+  </div>
+  <div class="wrap"><div class="private-body" id="content" hidden></div></div>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/data.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(async function () {
+  const form = document.getElementById("gateForm"), pw = document.getElementById("pw"),
+        err = document.getElementById("pwErr"), btn = document.getElementById("unlockBtn"),
+        gate = document.getElementById("gate"), content = document.getElementById("content");
+  const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+
+  let payload;
+  try { payload = await (await fetch("assets/private.enc.json", { cache: "no-store" })).json(); }
+  catch { err.textContent = "The team area has not been published yet."; btn.disabled = true; return; }
+
+  async function unlock(password) {
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]);
+    const key = await crypto.subtle.deriveKey(
+      { name: "PBKDF2", salt: b64(payload.salt), iterations: payload.iter, hash: "SHA-256" },
+      base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(payload.iv) }, key, b64(payload.data));
+    return new TextDecoder().decode(plain);
+  }
+
+  function show(html) {
+    content.innerHTML = html;
+    gate.hidden = true; content.hidden = false;
+    const h = content.querySelector("h2");
+    if (h) { h.setAttribute("tabindex", "-1"); h.focus(); }
+  }
+
+  // Keep the session unlocked while the tab is open.
+  try { const cached = sessionStorage.getItem("defiro-pw"); if (cached) { show(await unlock(cached)); return; } } catch {}
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!pw.value) { err.textContent = "Enter the team password."; pw.focus(); return; }
+    btn.disabled = true; btn.textContent = "Unlocking…"; err.textContent = "";
+    try {
+      show(await unlock(pw.value));
+      try { sessionStorage.setItem("defiro-pw", pw.value); } catch {}
+    } catch {
+      err.textContent = "That password is not correct.";
+      pw.select();
+    } finally { btn.disabled = false; btn.textContent = "Unlock"; }
+  });
+})();
+</script>
+</body>
+</html>

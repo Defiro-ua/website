@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>if(!/\/$|\.html$/.test(location.pathname))location.replace(location.pathname+"/"+location.search+location.hash)</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendar | defiro</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>try{var t=localStorage.getItem("defiro-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body data-page="calendar">
+<a class="skip" href="#main">Skip to content</a>
+<div id="site-header"></div>
+
+<main id="main">
+  <div class="page-title wrap"><h1>Our <span class="hl">Calendar</span></h1></div>
+  <div class="wrap" style="padding-bottom:80px">
+    <table class="cal">
+      <thead><tr><th scope="col">Milestone</th><th scope="col">Date</th><th scope="col">Task list</th></tr></thead>
+      <tbody id="calBody"></tbody>
+    </table>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/data.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

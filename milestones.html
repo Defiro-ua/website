@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>if(!/\/$|\.html$/.test(location.pathname))location.replace(location.pathname+"/"+location.search+location.hash)</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Milestones | defiro</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>try{var t=localStorage.getItem("defiro-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body data-page="milestones">
+<a class="skip" href="#main">Skip to content</a>
+<div id="site-header"></div>
+
+<main id="main">
+  <div class="page-title wrap"><h1 id="msTitle">Milestones</h1></div>
+  <div class="wrap" style="padding-bottom:80px">
+    <p class="ms-meta" id="msMeta"></p>
+    <nav class="tabs" id="msTabs" aria-label="Milestones"></nav>
+    <div class="embed" id="msEmbed"></div>
+    <div class="ms-links" id="msLinks"></div>
+
+    <!-- M1 · Inception -->
+    <article class="prose ms-content" data-ms="m1">
+      <h2>Goal</h2>
+      <p>Build a no-code, modular platform where any organisation can design its workflows and get a working application, with no programming.</p>
+
+      <h2>Context</h2>
+      <p>Companies and public bodies run many internal processes by hand: requests, approvals, reimbursements, purchases. Requests arrive by e-mail or on paper, pass from person to person and are filed in shared folders.</p>
+      <p>These processes look alike everywhere: a request, a few approval steps by role, some documents and a final record.</p>
+
+      <h2>Problem</h2>
+      <ul>
+        <li><strong>No visibility.</strong> It is hard to know where a request is and who acts next.</li>
+        <li><strong>No traceability.</strong> Nothing enforces the sequence or records what happened.</li>
+        <li><strong>High cost.</strong> Custom software for every process is slow and expensive, and generic BPM suites need specialists.</li>
+      </ul>
+
+      <h2>Expected results</h2>
+      <ul>
+        <li>Workflow designer, execution engine and generated application</li>
+        <li>A first real workflow running end to end</li>
+        <li>A second workflow built only in the designer, proving the approach is general</li>
+        <li>Open-source code and documentation</li>
+      </ul>
+
+      <h2>Actors</h2>
+      <ul>
+        <li><strong>Process owner</strong> designs the workflows</li>
+        <li><strong>Requester</strong> starts a request</li>
+        <li><strong>Approver</strong> validates, verifies or pays</li>
+        <li><strong>Administrator</strong> deploys defiro and connects identity and other systems</li>
+      </ul>
+
+      <h2>Related work</h2>
+      <p><span class="ph">State of the art: compare with 3–4 existing BPM / no-code tools and explain how defiro differs.</span></p>
+
+      <h2>Communication plan</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">What</th><th scope="col">Channel</th><th scope="col">When</th></tr></thead>
+          <tbody id="commsBody"></tbody>
+        </table>
+      </div>
+      <p class="callout">Advisors and the course instructor have access to the GitHub repository and to the team area. <span class="ph">confirm invites</span></p>
+    </article>
+
+  </div>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/data.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>
