@@ -1,4 +1,4 @@
-/*
+﻿/*
  * All site content lives here so the team can update it without touching the layout.
  *
  * Placeholders: wrap any text in [[double brackets]] and it renders as a highlighted
@@ -115,26 +115,17 @@ window.DEFIRO = {
 
   // Written reports (reports.html). Presentations come from `milestones` above.
   reports: [
-    { title: "Project proposal", ms: "M1", date: "2026-09-24", url: "" },
-    { title: "Project calendar & communication plan", ms: "M1", date: "2026-09-29", url: "" },
-    { title: "Vision & requirements", ms: "M1", date: "[[date TBD]]", url: "" },
-    { title: "Architecture & design", ms: "M2", date: "[[date TBD]]", url: "" },
-    { title: "Test & validation report", ms: "M4", date: "[[date TBD]]", url: "" },
-    { title: "Final report", ms: "M4", date: "[[date TBD]]", url: "" },
+    { title: "Minute 01", ms: "M1", date: "", url: "files/Minute01.pdf" },
+    { title: "Minute 02", ms: "M1", date: "", url: "files/Minute02.pdf" },
   ],
 
-  // Roles are a proposal; confirm with the team. Activities: newest first.
+
   team: [
-    { name: "Duarte Candeias", initials: "DC", role: "Team Leader · Frontend & UX", github: "Candeias-ua", linkedin: "",
-      activities: ["Project website", "Project calendar and communication plan", "Task inbox and dashboard"] },
-    { name: "Pedro Gonçalves", initials: "PG", role: "Workflow Engine · Backend", github: "", linkedin: "",
-      activities: ["System architecture", "Workflow engine", "Generated documents"] },
-    { name: "Daniel Rodrigues", initials: "DR", role: "Identity & Integrations", github: "", linkedin: "",
-      activities: ["Entra ID single sign-on", "Roles and delegation", "Export to accounting"] },
-    { name: "Bernardo Santos", initials: "BS", role: "Workflow Designer · Modelling", github: "", linkedin: "",
-      activities: ["State of the art", "UML subset and mapping", "Visual workflow designer", "Generated forms"] },
-    { name: "Dinis Sousa", initials: "DS", role: "DevOps & Quality", github: "", linkedin: "",
-      activities: ["GitHub organisation", "CI/CD", "Testing strategy", "Deployment"] },
+    { name: "Duarte Candeias", initials: "DC", github: "Candeias-ua", linkedin: "https://www.linkedin.com/in/duarte-candeias-554a85372" },
+    { name: "Pedro Gonçalves", initials: "PG", github: "pedroo-goncalves", linkedin: "https://www.linkedin.com/in/pedro-gon%C3%A7alves-a732a6429" },
+    { name: "Daniel Rodrigues", initials: "DR", github: "NXS2608", linkedin: "https://www.linkedin.com/in/daniel-rodr1/" },
+    { name: "Bernardo Santos", initials: "BS", github: "a16166", linkedin: "https://www.linkedin.com/in/bernardo-santos-50a3a13b3" },
+    { name: "Dinis Sousa", initials: "DS", github: "dinis-sousa0", linkedin: "https://www.linkedin.com/in/dinissousa05/" },
   ],
 
   advisors: [
@@ -147,8 +138,10 @@ window.DEFIRO = {
     { what: "Team chat", tool: "[[Discord / WhatsApp]]", when: "Daily" },
     { what: "Team meeting", tool: "[[in person / online]]", when: "[[weekly, day & time]]" },
     { what: "Advisor meeting", tool: "[[room / Teams]]", when: "[[every 2 weeks?]]" },
-        { what: "Tasks", tool: "GitHub Projects [[confirm]]", when: "Continuous" },
+    { what: "Tasks", tool: "GitHub Projects [[confirm]]", when: "Continuous" },
     { what: "Code & docs", tool: "GitHub", when: "Continuous" },
-    { what: "Minutes & private info", tool: "Team area of this site", when: "After each meeting" },
+    { what: "Minutes", tool: "Reports page of this site", when: "After each meeting" },
+    { what: "Private team information", tool: "Private Drive shared with advisors and instructor", when: "Continuous" },
   ],
 };
+

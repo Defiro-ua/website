@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   const $ = (s, r = document) => r.querySelector(s);
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const icon = (id) => `<svg class="icon" aria-hidden="true"><use href="#i-${id}"/></svg>`;
@@ -14,7 +14,6 @@
   const icons = {
     file: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h8"/>',
     slides: '<rect x="2" y="3" width="20" height="13" rx="2"/><path d="M12 16v5M8 21h8"/>',
-    lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
     ext: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
     menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
     sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
@@ -35,7 +34,7 @@
   $("#site-header").outerHTML = `
     <header class="site-header">
       <div class="wrap">
-        <a class="brand" href="index.html"><img src="assets/favicon.svg" alt="" width="30" height="30">defiro</a>
+        <a class="brand" href="index.html"><img src="assets/logo.png" alt="defiro" width="110" height="34"></a>
         <nav class="nav" id="nav" aria-label="Main">
           <a href="calendar.html"${cur("calendar")}>Calendar</a>
           <div class="dd${page === "milestones" ? " active" : ""}">
@@ -46,8 +45,7 @@
           <a href="team.html"${cur("team")}>Team</a>
         </nav>
         <div class="tools">
-          <a class="icon-btn" href="${REPO}" rel="noopener" aria-label="GitHub repository" title="GitHub repository">${icon("github")}</a>
-          <a class="icon-btn" href="private.html" aria-label="Team area" title="Team area"${cur("private")}>${icon("lock")}</a>
+          <a class="icon-btn" href="${REPO}" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository" title="GitHub repository">${icon("github")}</a>
           <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch colour theme"></button>
           <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">${icon("menu")}</button>
         </div>
@@ -58,12 +56,12 @@
     <footer>
       <div class="wrap">
         <div>
-          <div class="f-brand"><img src="assets/favicon.svg" alt="" width="32" height="32">defiro</div>
+          <div class="f-brand"><img src="assets/logo.png" alt="defiro" width="130" height="40"></div>
           <p class="f-note">A workflow automation platform, adaptable to any scenario. Projeto em Engenharia Informática, Universidade de Aveiro.</p>
         </div>
-        <div><h4>Project advisors</h4><ul>${(D.advisors || []).map((a) => `<li><a href="${esc(a.url)}" rel="noopener">${esc(a.name)}</a></li>`).join("")}</ul></div>
+        <div><h4>Project advisors</h4><ul>${(D.advisors || []).map((a) => `<li><a href="${esc(a.url)}" target="_blank" rel="noopener noreferrer">${esc(a.name)}</a></li>`).join("")}</ul></div>
         <div><h4>Project</h4><ul><li><a href="team.html">Team members</a></li><li><a href="calendar.html">Calendar</a></li><li><a href="reports.html">Reports</a></li></ul></div>
-        <div><h4>Other links</h4><ul><li><a href="${REPO}" rel="noopener">GitHub</a></li><li><a href="private.html">Team area</a></li></ul></div>
+        <div><h4>Other links</h4><ul><li><a href="${REPO}" target="_blank" rel="noopener noreferrer">GitHub</a></li></ul></div>
       </div>
     </footer>`;
 
@@ -123,8 +121,8 @@
         ? `<iframe src="${esc(m.slides)}" title="M${i + 1} presentation" loading="lazy" allowfullscreen></iframe>`
         : `<div class="embed-empty">${icon("slides")}<span>The M${i + 1} presentation will be available soon.</span></div>`;
       const links = [
-        m.slides && `<a class="btn btn-primary" href="${esc(m.slides)}" rel="noopener">${icon("slides")} Open slides</a>`,
-        m.report && `<a class="btn btn-ghost" href="${esc(m.report)}" rel="noopener">${icon("file")} Report</a>`,
+        m.slides && `<a class="btn btn-primary" href="${esc(m.slides)}" target="_blank" rel="noopener noreferrer">${icon("slides")} Open slides</a>`,
+        m.report && `<a class="btn btn-ghost" href="${esc(m.report)}" target="_blank" rel="noopener noreferrer">${icon("file")} Report</a>`,
       ].filter(Boolean);
       $("#msLinks").innerHTML = links.join("");
       $("#msLinks").hidden = !links.length;
@@ -151,7 +149,7 @@
   /* ---------- Reports ---------- */
   if ($("#presList")) {
     const openLink = (url, label) => url
-      ? `<a class="open" href="${esc(url)}" rel="noopener">${label} ${icon("ext")}</a>`
+      ? `<a class="open" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${label} ${icon("ext")}</a>`
       : `<span class="pending">Not yet published</span>`;
     $("#presList").innerHTML = D.milestones.map((m, i) => `
       <li class="doc">
@@ -162,7 +160,7 @@
     $("#repList").innerHTML = D.reports.map((r) => `
       <li class="doc">
         <div class="doc-ico">${icon("file")}</div>
-        <div><div class="doc-title">${txt(r.title)}</div><div class="doc-meta">${esc(r.ms)} · ${fmt(r.date)}</div></div>
+        <div><div class="doc-title">${txt(r.title)}</div><div class="doc-meta">${esc(r.ms)}${r.date ? " · " + fmt(r.date) : ""}</div></div>
         <div>${openLink(r.url, "PDF")}</div>
       </li>`).join("");
   }
@@ -173,13 +171,11 @@
       <article class="member">
         <div class="avatar" aria-hidden="true">${esc(m.initials)}</div>
         <h3>${esc(m.name)}</h3>
-        <div class="role">${txt(m.role)}</div>
         <div class="links">
-          ${m.github ? `<a class="icon-btn" href="https://github.com/${esc(m.github)}" rel="noopener" aria-label="${esc(m.name)} on GitHub">${icon("github")}</a>` : ""}
-          ${m.linkedin ? `<a class="icon-btn" href="${esc(m.linkedin)}" rel="noopener" aria-label="${esc(m.name)} on LinkedIn">${icon("linkedin")}</a>` : ""}
+          ${m.github ? `<a class="icon-btn" href="https://github.com/${esc(m.github)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(m.name)} on GitHub">${icon("github")}</a>` : ""}
+          ${m.linkedin ? `<a class="icon-btn" href="${esc(m.linkedin)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(m.name)} on LinkedIn">${icon("linkedin")}</a>` : ""}
           ${!m.github && !m.linkedin ? '<span class="ph">GitHub / LinkedIn</span>' : ""}
         </div>
-        <ul aria-label="Activities">${m.activities.map((a) => `<li>${txt(a)}</li>`).join("")}</ul>
       </article>`).join("");
   }
 })();
