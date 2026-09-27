@@ -136,28 +136,11 @@
     $("#commsBody").innerHTML = D.channels.map((c) => `<tr><td>${txt(c.what)}</td><td>${txt(c.tool)}</td><td>${txt(c.when)}</td></tr>`).join("");
   }
 
-  /* ---------- Home: milestone strip ---------- */
-  if ($("#msStrip")) {
-    $("#msStrip").innerHTML = D.milestones.map((m, i) => `
-      <a class="ms-card" href="milestones.html#${m.id}">
-        <span class="ms-num">M${i + 1}</span>
-        <span class="ms-name">${esc(m.name)}</span>
-        <span class="ms-dates">${esc(m.dates)}</span>
-        <span class="ms-status${m.slides ? " done" : ""}">${m.slides ? "Presentation available" : "Coming soon"}</span>
-      </a>`).join("");
-  }
-
   /* ---------- Reports ---------- */
-  if ($("#presList")) {
+  if ($("#repList")) {
     const openLink = (url, label) => url
       ? `<a class="open" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${label} ${icon("ext")}</a>`
       : `<span class="pending">Not yet published</span>`;
-    $("#presList").innerHTML = D.milestones.map((m, i) => `
-      <li class="doc">
-        <div class="doc-ico">${icon("slides")}</div>
-        <div><div class="doc-title"><a href="milestones.html#${m.id}">M${i + 1} · ${esc(m.name)}</a></div><div class="doc-meta">${esc(m.dates)}</div></div>
-        <div>${m.slides ? openLink(m.slides, "Slides") : '<span class="pending">Available soon</span>'}</div>
-      </li>`).join("");
     $("#repList").innerHTML = D.reports.map((r) => `
       <li class="doc">
         <div class="doc-ico">${icon("file")}</div>
