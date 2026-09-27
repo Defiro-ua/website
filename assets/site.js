@@ -98,10 +98,10 @@
   /* ---------- Calendar ---------- */
   if ($("#calBody")) {
     const list = (items) => `<ul>${items.map((t) => `<li>${txt(t)}</li>`).join("")}</ul>`;
-    // The milestone label sits on its last week (the one with the presentation), as in the team's calendar sheet.
+    // The milestone label sits on the week marked `ms` (the one with the presentation), as in the team's calendar sheet.
     $("#calBody").innerHTML = D.milestones.map((m, i) => m.calendar.map((c, j) => `
       <tr${j === 0 && i > 0 ? ' class="first"' : ""}>
-        <td>${j === m.calendar.length - 1 ? `<a href="milestones.html#${m.id}">M${i + 1} · ${esc(m.name)}</a>` : ""}</td>
+        <td>${c.ms ? `<a href="milestones.html#${m.id}">M${i + 1} · ${esc(m.name)}</a>` : ""}</td>
         <td>${txt(c.when)}</td>
         <td>${(c.modules || []).map((b) => `<div class="cal-mod">Module: ${esc(b.name)}</div>${list(b.tasks)}`).join("")}${c.tasks ? list(c.tasks) : ""}</td>
         <td>${c.deliverables ? list(c.deliverables) : ""}</td>

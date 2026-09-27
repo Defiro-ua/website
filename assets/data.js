@@ -14,7 +14,7 @@ window.DEFIRO = {
       goal: "Understand what to build: vision, scope, stakeholders, key requirements and the project plan.",
       slides: "", report: "",
       calendar: [
-        { when: "15/09 – 29/09", modules: [
+        { ms: true, when: "15/09 – 29/09", modules: [
           { name: "Project Planning", tasks: [
             "Project website (Duarte)",
             "GitHub organisation",
@@ -41,7 +41,7 @@ window.DEFIRO = {
             "Map manual procedures (CMA context)",
           ] },
         ] },
-        { when: "07/10 – 13/10", modules: [
+        { ms: true, when: "07/10 – 13/10", modules: [
           { name: "System Architecture & Mock-ups", tasks: [
             "Architecture design",
             "Design mockups",
@@ -69,7 +69,7 @@ window.DEFIRO = {
             "Audit trail / history",
           ] },
         ] },
-        { when: "28/10 – 03/11", modules: [
+        { ms: true, when: "28/10 – 03/11", modules: [
           { name: "Dynamic Forms & Documents", tasks: [
             "Form generation from model",
             "Document generation & export",
@@ -79,7 +79,7 @@ window.DEFIRO = {
       ],
     },
     {
-      id: "m4", name: "Transition", dates: "4 Nov – 15 Dec 2026", due: "2026-12-15",
+      id: "m4", name: "Transition", dates: "4 Nov – 16 Dec 2026", due: "2026-12-16",
       goal: "Integrate, validate with real users and hand the platform over.",
       slides: "", report: "",
       calendar: [
@@ -89,24 +89,67 @@ window.DEFIRO = {
             "Role & org-unit mapping",
             "Approver delegation",
           ] },
+        ] },
+        { when: "11/11 – 17/11", modules: [
           { name: "Inbox, Notifications & Dashboard", tasks: [
             "Task inbox",
             "Notifications (email/in-app)",
             "Metrics & dashboard",
           ] },
         ] },
-        { when: "11/11 – 17/11", modules: [
+        { when: "19/11 – 24/11", modules: [
+          { name: "Reimbursement Module", tasks: [
+            "Request → approval → payment flow",
+            "Accounting system export",
+          ] },
+        ] },
+        { when: "25/11 – 01/12", modules: [
           { name: "Integration", tasks: [
             "Connect Designer output → Lifecycle Engine",
             "Connect Engine → Dynamic Forms",
-            "End-to-end smoke test with dummy procedure",
+            "End-to-end tests",
           ] },
         ] },
-        { when: "19/11 – 24/11", tasks: ["User testing", "Stabilise final product"] },
-        { when: "25/11 – 01/12", tasks: ["Create documentation"] },
-        { when: "02/12 – 08/12", tasks: ["Prepare final presentation"] },
-        { when: "09/12 – 15/12", tasks: [
-          "Students@DETI: demo, poster, video",
+        { when: "02/12 – 08/12", modules: [
+          { name: "Integration (continuation)", tasks: [
+            "Bug fixing after testing",
+            "Refine communication between modules",
+          ] },
+        ] },
+        { ms: true, when: "09/12 – 16/12", tasks: ["Presentation", "Demo"] },
+        { when: "10/02/2027 – 23/02/2027", modules: [
+          { name: "Second Procedure", tasks: [
+            "Model second procedure as UML diagram",
+            "Validate that the diagram is correctly parsed and interpreted by the engine",
+          ] },
+        ] },
+        { when: "24/02/2027 – 09/03/2027", modules: [
+          { name: "Plug-in Architecture Validation", tasks: [
+            "Confirm the platform correctly generates the procedure (forms, tasks, lifecycle) from the user-created diagram",
+            "Fix any gaps in the Workflow Designer/engine exposed by this second procedure",
+          ] },
+        ] },
+        { when: "10/03/2027 – 23/03/2027", modules: [
+          { name: "Refinement", tasks: [
+            "Improve integration between modules",
+            "Usability improvements to the Workflow Designer (based on feedback from modeling the second procedure)",
+          ] },
+        ] },
+        { when: "24/03/2027 – 06/04/2027", modules: [
+          { name: "Performance & Stabilization", tasks: [
+            "Performance optimisation",
+            "Prepare environment for user testing phase",
+          ] },
+        ] },
+        { when: "07/04/2027 – 20/04/2027", tasks: ["User testing", "Apply improvements"] },
+        { when: "21/04/2027 – 04/05/2027", tasks: ["Data collection & analytics", "Stabilize final product"] },
+        { when: "05/05/2027 – 18/05/2027", tasks: ["Create documentation"] },
+        { when: "19/05/2027 – 01/06/2027", tasks: ["Prepare final presentation"] },
+        { when: "02/06/2027 – 04/06/2027", tasks: [
+          "Students@DETI",
+          "Demo",
+          "Poster",
+          "Video",
           "Prepare technical report",
         ] },
       ],
@@ -117,6 +160,7 @@ window.DEFIRO = {
   reports: [
     { title: "Minute 01", ms: "M1", date: "", url: "files/Minute01.pdf" },
     { title: "Minute 02", ms: "M1", date: "", url: "files/Minute02.pdf" },
+    { title: "Minute 03", ms: "M1", date: "", url: "files/Minute03.pdf" },
   ],
 
 
