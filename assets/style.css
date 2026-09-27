@@ -37,7 +37,10 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-padding-top: 90px; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 var(--font); -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 var(--font); -webkit-font-smoothing: antialiased;
+  display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+/* Main grows to fill short pages so the footer always sits at the bottom of the viewport. */
+main { flex: 1 0 auto; }
 img, svg { max-width: 100%; display: block; }
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
