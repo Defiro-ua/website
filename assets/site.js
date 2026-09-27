@@ -127,13 +127,9 @@
       ].filter(Boolean);
       $("#msLinks").innerHTML = links.join("");
       $("#msLinks").hidden = !links.length;
-      document.querySelectorAll(".ms-content").forEach((el) => (el.hidden = el.dataset.ms !== m.id));
     };
     addEventListener("hashchange", () => { show(); scrollTo(0, 0); });
     show();
-  }
-  if ($("#commsBody")) {
-    $("#commsBody").innerHTML = D.channels.map((c) => `<tr><td>${txt(c.what)}</td><td>${txt(c.tool)}</td><td>${txt(c.when)}</td></tr>`).join("");
   }
 
   /* ---------- Reports ---------- */
