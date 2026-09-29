@@ -165,11 +165,11 @@ window.DEFIRO = {
 
 
   team: [
-    { name: "Duarte Candeias", initials: "DC", github: "Candeias-ua", linkedin: "https://www.linkedin.com/in/duarte-candeias-554a85372" },
-    { name: "Pedro Gonçalves", initials: "PG", github: "pedroo-goncalves", linkedin: "https://www.linkedin.com/in/pedro-gon%C3%A7alves-a732a6429" },
-    { name: "Daniel Rodrigues", initials: "DR", github: "NXS2608", linkedin: "https://www.linkedin.com/in/daniel-rodr1/" },
-    { name: "Bernardo Santos", initials: "BS", github: "a16166", linkedin: "https://www.linkedin.com/in/bernardo-santos-50a3a13b3" },
-    { name: "Dinis Sousa", initials: "DS", github: "dinis-sousa0", linkedin: "https://www.linkedin.com/in/dinissousa05/" },
+    { name: "Duarte Candeias", initials: "DC", photo: "assets/team/candeias.jpg", github: "Candeias-ua", linkedin: "https://www.linkedin.com/in/duarte-candeias-554a85372" },
+    { name: "Pedro Gonçalves", initials: "PG", photo: "assets/team/pedro.jpg", github: "pedroo-goncalves", linkedin: "https://www.linkedin.com/in/pedro-gon%C3%A7alves-a732a6429" },
+    { name: "Daniel Rodrigues", initials: "DR", photo: "assets/team/daniel.jpg", github: "NXS2608", linkedin: "https://www.linkedin.com/in/daniel-rodr1/" },
+    { name: "Bernardo Santos", initials: "BS", photo: "assets/team/bernardo.jpg", github: "a16166", linkedin: "https://www.linkedin.com/in/bernardo-santos-50a3a13b3" },
+    { name: "Dinis Sousa", initials: "DS", photo: "assets/team/dinis.jpg", github: "dinis-sousa0", linkedin: "https://www.linkedin.com/in/dinissousa05/" },
   ],
 
   advisors: [

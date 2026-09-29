@@ -149,7 +149,7 @@
   if ($("#teamGrid")) {
     $("#teamGrid").innerHTML = D.team.map((m) => `
       <article class="member">
-        <div class="avatar" aria-hidden="true">${esc(m.initials)}</div>
+        <div class="avatar" aria-hidden="true">${m.photo ? `<img src="${esc(m.photo)}" alt="" loading="lazy">` : esc(m.initials)}</div>
         <h3>${esc(m.name)}</h3>
         <div class="links">
           ${m.github ? `<a class="icon-btn" href="https://github.com/${esc(m.github)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(m.name)} on GitHub">${icon("github")}</a>` : ""}
