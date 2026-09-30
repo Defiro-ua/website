@@ -12,7 +12,7 @@ window.DEFIRO = {
     {
       id: "m1", name: "Inception", dates: "15 Sep – 29 Sep 2026", due: "2026-09-29",
       goal: "Understand what to build: vision, scope, stakeholders, key requirements and the project plan.",
-      slides: "", report: "",
+      slides: "https://www.canva.com/design/DAHWUQ3PrvE/hRR0qCzSGS9mnsNoTqt9BQ/view?embed", report: "",
       calendar: [
         { ms: true, when: "15/09 – 29/09", modules: [
           { name: "Project Planning", tasks: [
