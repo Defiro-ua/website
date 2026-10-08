@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/style.css">
   <script>try{var t=localStorage.getItem("defiro-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("motion-on")</script>
 </head>
 <body data-page="milestones">
 <a class="skip" href="#main">Skip to content</a>
@@ -18,18 +19,25 @@
 
 <main id="main">
   <div class="page-title wrap">
+    <div class="title-shapes" aria-hidden="true"><span></span><span></span></div>
     <h1 id="msTitle">Milestones</h1>
     <p class="ms-meta" id="msMeta"></p>
   </div>
   <div class="wrap page-body">
-    <nav class="tabs" id="msTabs" aria-label="Milestones"></nav>
-    <div class="embed" id="msEmbed"></div>
-    <div class="ms-links" id="msLinks"></div>
+    <nav class="ms-line" id="msTabs" aria-label="Milestones"></nav>
+    <div class="embed reveal" id="msEmbed"></div>
+    <div class="ms-links reveal" id="msLinks"></div>
   </div>
 </main>
 
 <div id="site-footer"></div>
 <script src="assets/data.js"></script>
 <script src="assets/site.js"></script>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/line.js"></script>
+<script src="assets/page.js"></script>
+<script src="assets/milestones.js"></script>
+<script>window.DEFIRO_PAGE||document.documentElement.classList.remove("motion-on")</script>
 </body>
 </html>

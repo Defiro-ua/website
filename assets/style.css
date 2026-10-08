@@ -45,7 +45,7 @@ html { scroll-padding-top: 90px; -webkit-tap-highlight-color: rgb(218 98 2 / .15
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 var(--font); -webkit-font-smoothing: antialiased;
   display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
 /* Main grows to fill short pages so the footer always sits at the bottom of the viewport. */
-main { flex: 1 0 auto; }
+main { position: relative; flex: 1 0 auto; }
 img, svg { max-width: 100%; display: block; }
 a { color: inherit; }
 a, button { touch-action: manipulation; }
@@ -68,30 +68,52 @@ p { margin: 0; text-wrap: pretty; }
 }
 
 /* ---------- Header ---------- */
-.site-header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); }
-.site-header .wrap { display: flex; align-items: center; height: var(--header-h); gap: 12px; }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; text-decoration: none; letter-spacing: -0.02em; }
-.brand img { width: auto; height: 34px; }
-.nav { display: flex; align-items: center; gap: 4px; margin: 0 auto; }
-.nav > a, .dd > button {
-  display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 8px 14px; border-radius: var(--r-sm);
-  font: 400 15px var(--font); color: var(--ink-2); text-decoration: none; background: none; border: 0; cursor: pointer;
-  transition: color .15s, background-color .15s;
+/* A floating island. The header keeps a transparent zone --header-h tall (the Home and Team scenes stick
+   right below it), and the bar itself is a rounded capsule floating inside that zone. */
+.site-header { position: sticky; top: 0; z-index: 50; display: flex; justify-content: center; align-items: flex-start; height: var(--header-h); padding: 10px var(--gutter) 0; pointer-events: none; }
+/* Content that scrolls under the zone fades out behind the island. */
+.site-header::before { content: ""; position: absolute; inset: 0 0 -18px; z-index: -1; background: linear-gradient(to bottom, var(--bg) 30%, transparent); }
+.island {
+  position: relative; display: flex; align-items: center; gap: clamp(10px, 2vw, 24px); height: 56px; padding: 0 6px 0 20px; border-radius: var(--r-pill); pointer-events: auto;
+  background: color-mix(in srgb, var(--bg) 80%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: 0 10px 28px -14px rgb(var(--shadow) / .35); transform-origin: 50% 0; transition: transform .25s ease-out, box-shadow .25s ease-out;
 }
-.nav > a:hover, .dd > button:hover { color: var(--ink); background: var(--soft); }
-.nav a[aria-current="page"], .dd.active > button { color: var(--accent-ink); }
+/* Thin outline in the brand gradient. */
+.island::before {
+  content: ""; position: absolute; inset: 0; padding: 1.5px; border-radius: inherit; background: var(--grad); opacity: .6; pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+/* Once the page has scrolled (html.is-scrolled, set in site.js) the island gets a little smaller. */
+.is-scrolled .island { transform: scale(.94); box-shadow: 0 14px 32px -14px rgb(var(--shadow) / .5); }
+.brand { display: flex; align-items: center; text-decoration: none; }
+.brand img { width: auto; height: 30px; }
+.nav { position: relative; display: flex; align-items: center; gap: 2px; }
+.nav > a, .dd > button {
+  position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 8px 16px; border-radius: var(--r-pill);
+  font: 400 15px var(--font); color: var(--ink-2); text-decoration: none; background: none; border: 0; cursor: pointer; transition: color .2s;
+}
+.nav > a:hover, .dd > button:hover { color: var(--ink); }
+/* The sliding highlight: site.js moves it under the current page's link, or the one being pointed at. */
+.nav-pill {
+  position: absolute; z-index: 0; top: 50%; left: 0; width: var(--w, 0px); height: 44px; margin-top: -22px; border-radius: var(--r-pill); background: var(--grad);
+  transform: translateX(var(--x, 0px)); opacity: 0; transition: transform .35s cubic-bezier(.3, 1, .4, 1), width .35s cubic-bezier(.3, 1, .4, 1), opacity .2s;
+}
+.nav-pill.is-on { opacity: 1; }
+.nav-pill.no-anim { transition: none; }
+@media (min-width: 901px) { .nav .is-under, .nav .is-under:hover { color: var(--on-grad); } }
 .dd { position: relative; }
 .dd > button .icon { width: 16px; height: 16px; transition: transform .15s; }
 .dd.open > button .icon { transform: rotate(180deg); }
 .dd-menu {
-  position: absolute; top: 100%; left: 0; min-width: 210px; padding: 6px; margin-top: 4px; display: grid;
-  background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: 0 12px 32px -12px rgb(var(--shadow) / .28);
-  opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity .15s, transform .15s, visibility .15s;
+  position: absolute; top: calc(100% + 12px); left: 50%; min-width: 220px; padding: 8px; display: grid;
+  background: var(--bg); border: 1px solid var(--line-strong); border-radius: 22px; box-shadow: 0 16px 36px -14px rgb(var(--shadow) / .35);
+  opacity: 0; visibility: hidden; transform: translate(-50%, -6px); transition: opacity .15s, transform .15s, visibility .15s;
 }
-.dd.open .dd-menu { opacity: 1; visibility: visible; transform: none; }
-.dd-menu a { padding: 10px 12px; border-radius: var(--r-sm); text-decoration: none; font-size: 15px; color: var(--ink-2); min-height: 44px; display: flex; align-items: center; transition: color .15s, background-color .15s; }
+.dd.open .dd-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.dd-menu a { padding: 10px 14px; border-radius: 14px; text-decoration: none; font-size: 15px; color: var(--ink-2); min-height: 44px; display: flex; align-items: center; transition: color .15s, background-color .15s; }
 .dd-menu a:hover { background: var(--soft); color: var(--ink); }
-.tools { display: flex; align-items: center; gap: 4px; }
+.tools { display: flex; align-items: center; gap: 2px; }
 .icon-btn {
   display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: var(--r-sm);
   color: var(--ink); background: none; border: 0; cursor: pointer; text-decoration: none;
@@ -99,17 +121,25 @@ p { margin: 0; text-wrap: pretty; }
 }
 .icon-btn:hover { background: var(--soft); }
 .icon-btn:active { transform: scale(.94); }
+.island .icon-btn { border-radius: 50%; }
 .menu-btn { display: none; }
+.top-mark { position: absolute; top: 0; left: 0; width: 1px; height: 24px; pointer-events: none; }   /* see "Has the page scrolled?" in site.js */
 @media (max-width: 900px) {
-  .menu-btn { display: inline-grid; }
+  /* Phones: the island spans the width and the links open as a rounded sheet under it. */
+  .island { width: 100%; padding: 0 6px 0 18px; }
   .tools { margin-left: auto; }
+  .menu-btn { display: inline-grid; }
   .nav {
-    display: none; position: absolute; top: var(--header-h); left: 0; right: 0; margin: 0; flex-direction: column; align-items: stretch;
-    background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px var(--gutter) 16px;
+    display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0; flex-direction: column; align-items: stretch; padding: 10px;
+    background: var(--bg); border: 1px solid var(--line-strong); border-radius: 26px; box-shadow: 0 16px 36px -14px rgb(var(--shadow) / .35);
   }
-  .nav.open { display: flex; }
-  .dd-menu { position: static; border: 0; box-shadow: none; padding: 0 0 0 14px; margin: 0; opacity: 1; visibility: visible; transform: none; transition: none; }
+  .nav.open { display: flex; opacity: 1; translate: 0 0; transition: opacity .2s, translate .2s; }
+  @starting-style { .nav.open { opacity: 0; translate: 0 -8px; } }
+  .nav-pill { display: none; }
+  .nav > a, .dd > button { width: 100%; min-height: 48px; padding: 10px 16px; border-radius: 16px; font-size: 16px; }
+  .nav a[aria-current="page"], .dd.active > button { color: var(--accent-ink); background: var(--soft); }
   .dd > button .icon { display: none; }
+  .dd-menu { position: static; min-width: 0; border: 0; box-shadow: none; padding: 0 0 0 14px; background: none; opacity: 1; visibility: visible; transform: none; transition: none; }
 }
 
 /* ---------- Background flow rail ---------- */
@@ -148,11 +178,31 @@ p { margin: 0; text-wrap: pretty; }
 @keyframes rail-undrift { to { translate: 0 calc(-1 * var(--drift)); } }
 
 /* ---------- Page titles ---------- */
-.page-title { padding-top: clamp(40px, 6vw, 72px); padding-bottom: clamp(28px, 4vw, 44px); }
+.page-title { position: relative; z-index: 2; padding-top: clamp(40px, 6vw, 72px); padding-bottom: clamp(28px, 4vw, 44px); }
 .page-title h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 800; letter-spacing: -0.03em; }
 .page-title p { color: var(--ink-2); font-size: 18px; max-width: 620px; margin-top: 14px; }
 .page-body { padding-bottom: clamp(64px, 9vw, 110px); }
 .section-title { font-size: clamp(30px, 4vw, 42px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 44px; }
+
+/* ---------- Inner pages: shared motion ---------- */
+/* Calendar, Milestones and Reports put .motion-on on <html> in their <head> when motion is allowed, and
+   assets/page.js animates them. Without that class everything here is simply shown. */
+.page-title h1, .page-title p { position: relative; z-index: 1; }
+/* Brand bars beside the title, the same shapes as on Home and Team. page.js drifts them with the scroll. */
+.title-shapes { display: none; }
+@media (min-width: 700px) {
+  .title-shapes { display: block; position: absolute; z-index: 0; top: 0; bottom: 0; right: var(--gutter); width: min(30%, 300px); pointer-events: none; }
+  .title-shapes span { position: absolute; border-radius: 26px; background: linear-gradient(to bottom, var(--yellow), var(--orange)); }
+  .title-shapes span:nth-child(1) { top: 14px; right: 38%; width: 34px; height: 86px; }
+  .title-shapes span:nth-child(2) { top: 40px; right: 4%; width: 58px; height: 122px; }
+}
+/* Layers that follow the cursor a little: page.js sets --mx and --my on them. */
+.mouse-layer { translate: var(--mx, 0px) var(--my, 0px); }
+/* Content eases in: page.js adds .is-in when an element enters the screen, --i staggers a group. */
+@media screen and (prefers-reduced-motion: no-preference) {
+  .motion-on .reveal { opacity: 0; transform: translateY(16px); }
+  .motion-on .reveal.is-in { opacity: 1; transform: none; transition: opacity .45s ease-out, transform .45s cubic-bezier(.2, .7, .3, 1); transition-delay: calc(var(--i, 0) * 60ms); }
+}
 
 /* ---------- Home ---------- */
 .hero { position: relative; overflow: hidden; }
@@ -197,7 +247,6 @@ p { margin: 0; text-wrap: pretty; }
 .flow-line { position: absolute; left: 0; top: 0; z-index: 1; overflow: visible; pointer-events: none; }
 .flow-line path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .flow-line polygon { stroke-linejoin: round; }
-.flow-line.is-soft { opacity: .3; }   /* when it runs behind text (calendar) */
 .line-anchor { display: inline-block; width: 0; height: .5em; }   /* marks the end of a title, where a line starts */
 
 /* Brand bars from the M1 slides. They sit in empty areas, never behind text, and drift at their own speeds. */
@@ -205,11 +254,11 @@ p { margin: 0; text-wrap: pretty; }
 .scene-js .scene-shapes { display: block; }
 .scene-shapes span { position: absolute; border-radius: 26px; background: linear-gradient(to bottom, var(--yellow), var(--orange)); }
 .scene-shapes span:nth-child(1) { top: clamp(56px, 10vh, 120px); right: calc(var(--gutter) + 1%); width: clamp(64px, 8vw, 116px); height: clamp(170px, 30vh, 300px); }
-.scene-shapes span:nth-child(2) { top: -28px; left: 62%; width: 34px; height: 104px; }
+.scene-shapes span:nth-child(2) { top: 18px; left: 62%; width: 34px; height: 86px; }
 .scene-shapes span:nth-child(3), .scene-shapes span:nth-child(4) { display: none; }
 @media (max-width: 899px) {
   .scene-shapes span:nth-child(1) { display: none; }
-  .scene-shapes span:nth-child(2) { top: -30px; left: auto; right: calc(var(--gutter) + 4%); width: 26px; height: 78px; }
+  .scene-shapes span:nth-child(2) { top: 10px; left: auto; right: calc(var(--gutter) + 4%); width: 26px; height: 62px; }
 }
 
 /* Steps. If home.js fails they are joined by this plain straight line; normally the curved line replaces it. */
@@ -274,45 +323,83 @@ p { margin: 0; text-wrap: pretty; }
 }
 
 /* ---------- Calendar ---------- */
-/* The thick line (assets/calendar.js) snakes from side to side behind the table. It is drawn soft, and the
-   table text has a halo of the page colour (invisible except over the line), so the words stay readable. */
-[data-page="calendar"] main { position: relative; }
-[data-page="calendar"] .page-title, [data-page="calendar"] .cal { position: relative; z-index: 2; }
-[data-page="calendar"] .cal { text-shadow: 0 0 2px var(--bg), 0 0 4px var(--bg), 0 0 6px var(--bg); }
-/* One divider per milestone; the weeks inside a milestone are separated by space only. */
-.cal { width: 100%; border-collapse: collapse; }
-.cal th { text-align: left; font-size: 14px; font-weight: 600; padding: 14px 16px; border-bottom: 1px solid var(--line-strong); }
-.cal td { vertical-align: top; padding: 16px; font-size: 15px; color: var(--ink-2); }
-.cal td:first-child { width: 18%; }
-.cal td:nth-child(2) { width: 16%; white-space: nowrap; color: var(--ink-3); font-variant-numeric: tabular-nums; }
-.cal td a { color: var(--ink); font-weight: 600; text-underline-offset: 4px; transition: color .15s; }
-.cal td a:hover { color: var(--accent-ink); }
-.cal ul { margin: 0; padding-left: 18px; display: grid; gap: 2px; }
-.cal td:nth-child(4) { width: 20%; }
+/* A timeline (built in site.js). Each milestone phase is a grid: the milestone's name, the spine, the weeks.
+   The thick line (assets/page.js) runs down the spine column behind the dots.
+   The name is sticky inside a rail that spans the rows of the weeks before the milestone's own week
+   (--rows). The rail reaches one line further down, so the name comes to rest beside that week's big dot. */
+.tl { --label: 190px; --spine: 64px; position: relative; z-index: 2; padding-top: clamp(24px, 4vw, 44px); }
+.tl-phase { display: grid; grid-template-columns: var(--label) var(--spine) minmax(0, 1fr); }
+.tl-rail { grid-column: 1; grid-row: 1 / span var(--rows, 1); margin-bottom: -26.4px; }   /* one line of the name: 16px x 1.65 */
+.tl-rail.is-still { margin-bottom: 0; }   /* the milestone's own week is its first: nothing to travel past */
+.tl-rail.is-still .tl-label { position: static; }
+.tl-label { position: sticky; top: calc(var(--header-h) + 16px); text-align: right; font-size: 16px; font-weight: 600; line-height: 1.65; letter-spacing: 0; text-wrap: nowrap; }
+.tl-label a { color: var(--ink); text-underline-offset: 4px; transition: color .15s; }
+.tl-label a:hover { color: var(--accent-ink); }
+.tl-week { grid-column: 2 / 4; display: grid; grid-template-columns: var(--spine) minmax(0, 1fr); padding-bottom: 36px; }
+/* If page.js never ran there is no thick line, so each week draws a thin piece of spine instead. */
+.tl:not(.has-line) .tl-week { background: linear-gradient(var(--line-strong), var(--line-strong)) calc(var(--spine) / 2 - 1px) 0 / 2px 100% no-repeat; }
+/* One dot per week, centred on the first line of text; the milestone's week has a bigger one.
+   Filled: the week has passed. Filled with a halo: this week. Empty: still to come. */
+.tl-dot { --dot: 18px; grid-column: 1; justify-self: center; position: relative; z-index: 2; box-sizing: border-box; width: var(--dot); height: var(--dot); margin-top: calc(12.4px - var(--dot) / 2);
+  border-radius: 50%; background: var(--bg); border: 3px solid var(--orange); transition: transform .35s cubic-bezier(.3, 1.5, .5, 1), background-color .2s, border-color .2s, box-shadow .2s; }
+.is-ms > .tl-dot { --dot: 28px; border-width: 4px; }
+[data-state="past"] > .tl-dot, [data-state="now"] > .tl-dot { background: var(--orange); }
+[data-state="now"] > .tl-dot { box-shadow: 0 0 0 6px color-mix(in srgb, var(--orange) 28%, transparent); }
+/* While page.js is drawing the line, a dot it has not reached yet is a small grey ring. */
+@media screen and (prefers-reduced-motion: no-preference) {
+  .motion-on .tl-dot:not(.is-reached) { transform: scale(.6); background: var(--bg); border-color: var(--line-strong); box-shadow: none; }
+}
+.tl-card { grid-column: 2; display: grid; grid-template-columns: minmax(0, 1fr) 230px; grid-template-areas: "when deliv" "body deliv"; column-gap: 32px; align-content: start; font-size: 15px; color: var(--ink-2); }
+.tl-when { grid-area: when; margin: 0 0 6px; font-size: 15px; font-weight: 600; line-height: 1.65; letter-spacing: 0; color: var(--ink); font-variant-numeric: tabular-nums; }
+.tl-now { display: none; margin-left: 8px; padding: 2px 10px; border-radius: var(--r-pill); background: var(--grad); color: var(--on-grad); font-size: 12px; }
+[data-state="now"] .tl-now { display: inline-block; }
+.tl-body { grid-area: body; max-width: 62ch; }
+.tl-deliv { grid-area: deliv; }
+.tl ul { margin: 0; padding-left: 18px; display: grid; gap: 2px; }
 .cal-mod { color: var(--ink); font-weight: 600; margin: 0 0 4px; }
-.cal-mod ~ .cal-mod { margin-top: 10px; }
-.cal tr.first td { border-top: 1px solid var(--line-strong); }
-.cal tbody tr:last-child td { border-bottom: 1px solid var(--line-strong); }
-@media (max-width: 700px) {
-  .cal thead { display: none; }
-  .cal, .cal tbody, .cal tr, .cal td { display: block; width: auto !important; }
-  .cal tr { padding: 12px 0; }
-  .cal tr.first { border-top: 1px solid var(--line-strong); }
-  .cal tbody tr:last-child { border-bottom: 1px solid var(--line-strong); }
-  .cal td, .cal tr.first td, .cal tbody tr:last-child td { border: 0; padding: 4px 0; white-space: normal !important; }
-  .cal td:empty { display: none; }
-  /* The header row is hidden here, so the deliverables need their own label. */
-  .cal td:nth-child(4)::before { content: "Deliverables"; display: block; color: var(--ink); font-weight: 600; margin: 6px 0 4px; }
+.tl ul + .cal-mod { margin-top: 10px; }
+@media (max-width: 1000px) {
+  .tl-card { grid-template-columns: minmax(0, 1fr); grid-template-areas: "when" "body" "deliv"; }
+  .tl-deliv { margin-top: 10px; }
+}
+@media (max-width: 800px) {
+  /* Phones: the spine runs down the left edge and the milestone's name sits above its weeks. */
+  .tl { --spine: 34px; }
+  .tl-phase { grid-template-columns: var(--spine) minmax(0, 1fr); }
+  .tl-rail, .tl-rail.is-still { grid-column: 2; grid-row: auto; margin: 0 0 10px; }
+  .tl-label { position: static; text-align: left; }
+  .tl-week { grid-column: 1 / 3; padding-bottom: 28px; }
+}
+/* Brand bars in the empty right margin, drifting as the page scrolls (page.js). Wide screens only: they
+   mirror the arrow rail in the left margin and stay outside the content column, so never behind text. */
+.margin-shapes { display: none; }
+@media (min-width: 1320px) {
+  .margin-shapes { display: block; position: absolute; z-index: 0; top: 0; bottom: 0; left: calc(50% + var(--maxw) / 2 + 22px); width: 60px; pointer-events: none; }
+  .margin-shapes span { position: absolute; border-radius: 26px; background: linear-gradient(to bottom, var(--yellow), var(--orange)); }
+  .margin-shapes span:nth-child(1) { top: 17%; left: 12px; width: 34px; height: 110px; }
+  .margin-shapes span:nth-child(2) { top: 39%; left: 0; width: 58px; height: 170px; }
+  .margin-shapes span:nth-child(3) { top: 62%; left: 22px; width: 26px; height: 90px; }
+  .margin-shapes span:nth-child(4) { top: 83%; left: 6px; width: 44px; height: 130px; }
 }
 
 /* ---------- Milestones ---------- */
-.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
-.tabs a { padding: 10px 18px; min-height: 44px; display: inline-flex; align-items: center; border-radius: var(--r-pill); border: 1px solid var(--line-strong); text-decoration: none; font-size: 15px; color: var(--ink-2);
-  transition: border-color .15s, color .15s, transform .1s; }
-.tabs a[aria-current="true"] { background: var(--grad); color: var(--on-grad); border-color: transparent; font-weight: 600; }
-.tabs a:hover { border-color: var(--orange); color: var(--ink); }
-.tabs a[aria-current="true"]:hover { color: var(--on-grad); }
-.tabs a:active { transform: translateY(1px); }
+/* The tabs are dots on a line (built in site.js). A dashed track joins them all, and the thick line
+   (assets/milestones.js) is drawn from the first dot to the selected one.
+   Filled dot: an earlier milestone. Ringed dot: the selected one. Empty: later ones. */
+.ms-line { --n: 4; position: relative; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); margin-bottom: 36px; }
+.ms-line::before { content: ""; position: absolute; top: 24px; left: calc(50% / var(--n)); right: calc(50% / var(--n)); border-top: 2px dashed var(--line-strong); }
+.ms-line a { position: relative; z-index: 2; display: grid; justify-items: center; align-content: start; padding: 12px 6px 8px; border-radius: var(--r-md); text-decoration: none; text-align: center; color: var(--ink-3); transition: color .15s; }
+.ms-line a:hover { color: var(--ink); }
+.ms-dot { box-sizing: border-box; width: 26px; height: 26px; margin-bottom: 12px; border-radius: 50%; background: var(--bg); border: 3px solid var(--line-strong);
+  transition: transform .35s cubic-bezier(.3, 1.5, .5, 1), background-color .2s, border-color .2s, border-width .2s, box-shadow .2s; }
+.ms-line a:hover .ms-dot { border-color: var(--orange); }
+.ms-line [data-state="past"] .ms-dot { background: var(--orange); border-color: var(--orange); }
+.ms-line [data-state="now"] .ms-dot { transform: scale(1.25); border: 7px solid var(--orange); box-shadow: 0 0 0 5px color-mix(in srgb, var(--orange) 25%, transparent); }
+.ms-line a:active .ms-dot { transform: scale(1.1); }
+.ms-id { font-weight: 600; line-height: 1.35; color: var(--ink); }
+.ms-name { font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+.ms-line [data-state="now"] .ms-name { color: var(--accent-ink); font-weight: 600; }
+@media (max-width: 560px) { .ms-name { display: none; } }   /* the name is already in the page title */
 .ms-meta { color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .embed { aspect-ratio: 16 / 9; border-radius: var(--r-md); border: 1px solid var(--line); overflow: hidden; background: var(--soft); box-shadow: 0 24px 56px -28px rgb(var(--shadow) / .35); }
 .embed iframe { width: 100%; height: 100%; border: 0; }
@@ -326,10 +413,13 @@ p { margin: 0; text-wrap: pretty; }
 
 /* ---------- Reports ---------- */
 .doc-list { list-style: none; margin: 0; padding: 6px clamp(12px, 2.5vw, 24px); background: var(--soft); border-radius: var(--r-md); }
-.doc { display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: center; padding: 16px 0; }
+/* The thick line (assets/page.js) runs down through the icons: above the list background, below the rows. */
+.doc { position: relative; z-index: 2; display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: center; padding: 16px 0; }
 .doc + .doc { border-top: 1px solid var(--line-strong); }
 .doc > :nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
-.doc-ico { width: 48px; height: 48px; border-radius: var(--r-md); display: grid; place-items: center; background: var(--bg); color: var(--accent-ink); }
+.doc-ico { width: 48px; height: 48px; border-radius: var(--r-md); display: grid; place-items: center; background: var(--bg); color: var(--accent-ink); transition: transform .35s cubic-bezier(.3, 1.5, .5, 1), box-shadow .2s; }
+.doc-ico.is-reached { box-shadow: 0 0 0 2px var(--orange); }   /* the line has got to this document */
+@media screen and (prefers-reduced-motion: no-preference) { .motion-on .doc-ico:not(.is-reached) { transform: scale(.86); } }
 .doc-title { font-weight: 600; }
 .doc-meta { font-size: 14px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .doc a.open { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: var(--r-pill); font-size: 14px; font-weight: 600; color: var(--accent-ink); text-underline-offset: 4px;
@@ -359,8 +449,8 @@ p { margin: 0; text-wrap: pretty; }
    member at a time: swipe it on touch screens; on a computer the section sticks under the header and
    every scroll moves the row sideways by one member. assets/team.js draws the thick line through the photos and reveals
    each member as it arrives. Without .deck-on the plain grid above is used.
-   Layers inside the row: 0 giant initials, 1 the line, 2 photos and text. */
-.member-ghost, .deck-shapes, .deck-ui { display: none; }
+   Layers inside the row: 1 the line, 2 photos and text. */
+.deck-shapes, .deck-ui { display: none; }
 .deck-on .deck {
   --slide: clamp(230px, 38vw, 440px); --photo: clamp(150px, min(22vw, 30vh), 270px); --rise: clamp(18px, 5vh, 52px); --deck-scroll: 280vh;
   /* Side padding that centres the first and last member. team.js sets --view to the exact width of the row's window. */
@@ -369,7 +459,7 @@ p { margin: 0; text-wrap: pretty; }
 .deck-on .deck-view { position: relative; margin: 0 calc(var(--gutter) * -1); padding: 28px 0 12px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
 .deck-on .deck-view::-webkit-scrollbar { display: none; }
 .deck-on .deck-view.is-dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
-/* Clipped sideways so the giant initials and the start of the line cannot make the row scroll further than its last member. */
+/* Clipped sideways so the start of the line cannot make the row scroll further than its last member. */
 .deck-on .team { position: relative; box-sizing: content-box; display: flex; align-items: flex-start; gap: 0; width: max-content; padding: 0 var(--pad); overflow-x: clip; }
 .deck-on .member { --top: 0px; position: relative; flex: 0 0 var(--slide); padding: var(--top) 12px 0; background: none; border-radius: 0; scroll-snap-align: center; cursor: pointer; }
 .deck-on .member:nth-child(even) { --top: var(--rise); }   /* every other member sits lower, so the line waves */
@@ -383,7 +473,6 @@ p { margin: 0; text-wrap: pretty; }
 .deck-on .member h3, .deck-on .member .links { position: relative; z-index: 2; }
 .deck-on .member h3 { font-size: clamp(20px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.02em; }
 .deck-on .member .links .icon-btn:hover { background: var(--soft); }
-.deck-on .member-ghost { display: block; position: absolute; z-index: 0; top: calc(var(--top) + var(--photo) * .1); left: -50%; right: -50%; text-align: center; font-size: calc(var(--photo) * 1.2); font-weight: 800; line-height: 1; letter-spacing: -.05em; opacity: .05; pointer-events: none; user-select: none; }
 /* Arrows and dots under the row. */
 .deck-on .deck-ui { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 6px; }
 .deck-arrow { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); cursor: pointer; transition: border-color .15s, background-color .15s, opacity .15s, transform .1s; }
@@ -409,13 +498,18 @@ p { margin: 0; text-wrap: pretty; }
   /* Brand bars in the top right corner: the slowest parallax layer. */
   .deck-on .deck-shapes { display: block; position: absolute; inset: 0; z-index: 0; max-width: var(--maxw); margin: 0 auto; pointer-events: none; }
   .deck-shapes span { position: absolute; border-radius: 26px; background: linear-gradient(to bottom, var(--yellow), var(--orange)); }
-  .deck-shapes span:nth-child(1) { top: -30px; right: calc(var(--gutter) + 13%); width: 34px; height: 112px; }
+  .deck-shapes span:nth-child(1) { top: 16px; right: calc(var(--gutter) + 13%); width: 34px; height: 86px; }
   .deck-shapes span:nth-child(2) { top: 5%; right: calc(var(--gutter) + 2%); width: 58px; height: 16%; }
 }
 
 /* ---------- Footer ---------- */
 /* Sits above the flow rail so the arrows never run over it. */
 footer { position: relative; z-index: 2; background: var(--footer); color: var(--footer-ink); border-top: 1px solid rgb(255 255 255 / .06); }
+/* Footer reveal: with html.foot-reveal (set in site.js when the footer fits on screen and motion is allowed)
+   the footer waits at the bottom of the window underneath the page, and the page lifts off it at the end.
+   The clip keeps the arrow rail, which is fixed to the window, inside the page so it lifts with it. */
+.foot-reveal main { position: relative; z-index: 1; background: var(--bg); clip-path: inset(0); }
+.foot-reveal footer { position: sticky; bottom: 0; z-index: 0; }
 footer .wrap { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; padding-top: 56px; padding-bottom: 56px; }
 @media (max-width: 800px) { footer .wrap { grid-template-columns: 1fr 1fr; } }
 footer .f-brand { display: flex; align-items: center; gap: 10px; color: #fbf8f2; font-weight: 800; font-size: 22px; }

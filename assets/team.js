@@ -20,7 +20,7 @@
   if (n < 2) { root.classList.remove("deck-on"); return; }
   const shapes = [...deck.querySelectorAll(".deck-shapes span")];
   const pinMq = matchMedia("(min-width: 900px) and (min-height: 620px) and (pointer: fine)");   // keep in sync with style.css
-  const part = (m) => ({ photo: $(".avatar", m), info: [$("h3", m), $(".links", m)], ghost: $(".member-ghost", m) });
+  const part = (m) => ({ photo: $(".avatar", m), info: [$("h3", m), $(".links", m)] });
 
   /* ---------- Controls: arrows and dots ---------- */
   const ui = document.createElement("div");
@@ -77,7 +77,7 @@
     draw();
 
     members.forEach((m, i) => {
-      const { photo, info, ghost } = part(m);
+      const { photo, info } = part(m);
       if (i > 0) {
         // Step i-1 brings this member in: the line reaches out first, the photo pops when it lands, then the row follows.
         const t = i - 1;
@@ -86,8 +86,7 @@
           .fromTo(photo, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 0.84, duration: 0.2, ease: "back.out(2)" }, t + 0.44)
           .fromTo(m, { "--ring": 1 }, { "--ring": 0, duration: 0.15 }, t + 0.44)   // the placeholder ring gives way to the photo
           .fromTo(photo, { scale: 0.84 }, { scale: 1, duration: 0.34, ease: "power2.out", immediateRender: false }, t + 0.66)
-          .fromTo(info, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: 0.06 }, t + 0.6)
-          .fromTo(ghost, { opacity: 0 }, { opacity: 0.05, duration: 0.3 }, t + 0.5);
+          .fromTo(info, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: 0.06 }, t + 0.6);
         if (pinned) tl.to(rail, { x: -i * slide, duration: 0.8, ease: "power2.inOut" }, t + 0.2);
       }
       // A member that has been passed steps back: smaller and paler. The photo is veiled rather than made
@@ -96,9 +95,8 @@
         tl.fromTo(photo, { scale: 1, "--veil": 0 }, { scale: 0.84, "--veil": 0.5, duration: 0.6, ease: "power1.inOut", immediateRender: false }, i + 0.25)
           .fromTo(info, { opacity: 1 }, { opacity: 0.5, duration: 0.6, immediateRender: false }, i + 0.25);
       }
-      // Parallax: the giant initials lag behind the row, the name runs a little ahead of it.
-      tl.fromTo(ghost, { x: 0.22 * i * slide }, { x: 0.22 * (i - n + 1) * slide, duration: n - 1 }, 0)
-        .fromTo(info[0], { x: -0.06 * i * slide }, { x: -0.06 * (i - n + 1) * slide, duration: n - 1 }, 0);
+      // Parallax: the name runs a little ahead of the row.
+      tl.fromTo(info[0], { x: -0.06 * i * slide }, { x: -0.06 * (i - n + 1) * slide, duration: n - 1 }, 0);
     });
     shapes.forEach((el, k) => tl.to(el, { x: -(40 + k * 70), duration: n - 1 }, 0));   // brand bars: the slowest layer
     gsap.set(members[0], { "--ring": 0 });
