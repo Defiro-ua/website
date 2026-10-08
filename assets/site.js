@@ -34,7 +34,7 @@
   $("#site-header").outerHTML = `
     <header class="site-header">
       <div class="wrap">
-        <a class="brand" href="index.html"><img src="assets/logo.png" alt="defiro" width="110" height="34"></a>
+        <a class="brand" href="index.html" translate="no"><img src="assets/logo.png" alt="defiro" width="110" height="34"></a>
         <nav class="nav" id="nav" aria-label="Main">
           <a href="calendar.html"${cur("calendar")}>Calendar</a>
           <div class="dd${page === "milestones" ? " active" : ""}">
@@ -56,7 +56,7 @@
     <footer>
       <div class="wrap">
         <div>
-          <div class="f-brand"><img src="assets/logo-branco.png" alt="defiro" width="130" height="45"></div>
+          <div class="f-brand" translate="no"><img src="assets/logo-branco.png" alt="defiro" width="130" height="45"></div>
           <p class="f-note">A workflow automation platform, adaptable to any scenario. Projeto em Engenharia Informática, Universidade de Aveiro.</p>
           <p class="f-note">PEI 2026/27 · Universidade de Aveiro</p>
         </div>
@@ -68,10 +68,12 @@
 
   /* ---------- Theme ---------- */
   const root = document.documentElement, themeBtn = $("#themeBtn");
+  const themeColor = document.head.appendChild(Object.assign(document.createElement("meta"), { name: "theme-color" }));
   const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
   const syncTheme = () => {
     themeBtn.innerHTML = icon(isDark() ? "sun" : "moon");
     themeBtn.setAttribute("aria-label", isDark() ? "Switch to light theme" : "Switch to dark theme");
+    themeColor.content = getComputedStyle(root).getPropertyValue("--bg").trim();
   };
   themeBtn.addEventListener("click", () => {
     root.dataset.theme = isDark() ? "light" : "dark";
@@ -94,6 +96,9 @@
   document.addEventListener("click", (e) => { if (!dd.contains(e.target)) { dd.classList.remove("open"); ddBtn.setAttribute("aria-expanded", "false"); } });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && dd.classList.contains("open")) { dd.classList.remove("open"); ddBtn.setAttribute("aria-expanded", "false"); ddBtn.focus(); } });
   nav.addEventListener("click", (e) => { if (e.target.closest("a")) { nav.classList.remove("open"); dd.classList.remove("open"); } });
+
+  /* ---------- Background flow rail (styled and animated in CSS) ---------- */
+  document.body.insertAdjacentHTML("beforeend", '<div class="flow-rail" aria-hidden="true"><i></i><div class="flow-rail-fill"><div><i></i></div></div></div>');
 
   /* ---------- Calendar ---------- */
   if ($("#calBody")) {
@@ -149,7 +154,8 @@
   if ($("#teamGrid")) {
     $("#teamGrid").innerHTML = D.team.map((m) => `
       <article class="member">
-        <div class="avatar" aria-hidden="true">${m.photo ? `<img src="${esc(m.photo)}" alt="" loading="lazy">` : esc(m.initials)}</div>
+        <span class="member-ghost" aria-hidden="true">${esc(m.initials)}</span>
+        <div class="avatar" aria-hidden="true">${m.photo ? `<img src="${esc(m.photo)}" alt="" width="600" height="600" decoding="async">` : esc(m.initials)}</div>
         <h3>${esc(m.name)}</h3>
         <div class="links">
           ${m.github ? `<a class="icon-btn" href="https://github.com/${esc(m.github)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(m.name)} on GitHub">${icon("github")}</a>` : ""}
