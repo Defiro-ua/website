@@ -143,41 +143,6 @@ p { margin: 0; text-wrap: pretty; }
   .dd-menu, .dd.open .dd-menu { position: static; min-width: 0; border: 0; box-shadow: none; padding: 0 0 0 14px; background: none; opacity: 1; visibility: visible; transform: none; transition: none; }
 }
 
-/* ---------- Background flow rail ---------- */
-/* A column of down arrows in the left margin. As the page scrolls it lights up in the brand gradient and
-   the arrows slide down slowly (parallax), using a CSS scroll timeline (no scroll listeners). Where that
-   is unsupported, or motion is reduced, it stays as faint static arrows. Hidden when the margin is too
-   narrow to hold it. */
-.flow-rail { display: none; }
-@media (min-width: 1320px) {
-  .flow-rail {
-    display: block; position: fixed; z-index: 1; pointer-events: none; overflow: hidden;
-    top: calc(var(--header-h) + 28px); bottom: 28px; left: calc(50vw - var(--maxw) / 2 - 64px); width: 24px;
-    --chev: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='44' viewBox='0 0 24 44'%3E%3Cpath d='M6 18l6 6 6-6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    --drift: 880px;   /* how far the arrows can slide; a whole number of 44px tiles */
-  }
-  /* Both arrow layers are taller than the rail by --drift, so they can slide down without running out. */
-  .flow-rail i {
-    position: absolute; inset: calc(-1 * var(--drift)) 0 0 0;
-    -webkit-mask: var(--chev) top center / 24px 44px repeat-y; mask: var(--chev) top center / 24px 44px repeat-y;
-  }
-  .flow-rail > i { background: var(--line-strong); }
-  /* The fill is revealed top-down by sliding a clipping box and counter-sliding its content (transform only). */
-  .flow-rail-fill, .flow-rail-fill > div { position: absolute; inset: 0; overflow: hidden; }
-  .flow-rail-fill { translate: 0 -100%; }
-  .flow-rail-fill > div { translate: 0 100%; }
-  .flow-rail-fill i::before { content: ""; position: absolute; inset: var(--drift) 0 0 0; background: linear-gradient(to bottom, var(--yellow), var(--orange)); }
-  @supports (animation-timeline: scroll()) {
-    .flow-rail-fill, .flow-rail-fill > div { animation: rail-reveal linear both; animation-timeline: scroll(root block); }
-    /* The arrows move at a tenth of the scroll speed. The gradient slides back by the same amount, so it stays put. */
-    .flow-rail i, .flow-rail-fill i::before { animation: rail-drift linear both; animation-timeline: scroll(root block); animation-range: 0px calc(10 * var(--drift)); }
-    .flow-rail-fill i::before { animation-name: rail-undrift; }
-  }
-}
-@keyframes rail-reveal { to { translate: 0 0; } }
-@keyframes rail-drift { to { translate: 0 var(--drift); } }
-@keyframes rail-undrift { to { translate: 0 calc(-1 * var(--drift)); } }
-
 /* ---------- Page titles ---------- */
 .page-title { position: relative; z-index: 2; padding-top: clamp(40px, 6vw, 72px); padding-bottom: clamp(28px, 4vw, 44px); }
 .page-title h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 800; letter-spacing: -0.03em; }
@@ -372,7 +337,7 @@ p { margin: 0; text-wrap: pretty; }
   .tl-week { grid-column: 1 / 3; padding-bottom: 28px; }
 }
 /* Brand bars in the empty right margin, drifting as the page scrolls (page.js). Wide screens only: they
-   mirror the arrow rail in the left margin and stay outside the content column, so never behind text. */
+   stay outside the content column, so never behind text. */
 .margin-shapes { display: none; }
 @media (min-width: 1320px) {
   .margin-shapes { display: block; position: absolute; z-index: 0; top: 0; bottom: 0; left: calc(50% + var(--maxw) / 2 + 22px); width: 60px; pointer-events: none; }
@@ -462,7 +427,9 @@ p { margin: 0; text-wrap: pretty; }
 .deck-on .deck-view.is-dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
 /* Clipped sideways so the start of the line cannot make the row scroll further than its last member. */
 .deck-on .team { position: relative; box-sizing: content-box; display: flex; align-items: flex-start; gap: 0; width: max-content; padding: 0 var(--pad); overflow-x: clip; }
-.deck-on .member { --top: 0px; position: relative; flex: 0 0 var(--slide); padding: var(--top) 12px 0; background: none; border-radius: 0; scroll-snap-align: center; cursor: pointer; }
+/* Each member has an explicit width, not only a flex-basis: Safari and Firefox size the row (max-content)
+   from the members' widths and ignore flex-basis, which left the row too short to reach the last member. */
+.deck-on .member { --top: 0px; position: relative; flex: none; width: var(--slide); padding: var(--top) 12px 0; background: none; border-radius: 0; scroll-snap-align: center; cursor: pointer; }
 .deck-on .member:nth-child(even) { --top: var(--rise); }   /* every other member sits lower, so the line waves */
 .deck-on .member.is-current { cursor: auto; }
 .deck-on .member:not(.is-current) .links { pointer-events: none; }
@@ -504,12 +471,10 @@ p { margin: 0; text-wrap: pretty; }
 }
 
 /* ---------- Footer ---------- */
-/* Sits above the flow rail so the arrows never run over it. */
 footer { position: relative; z-index: 2; background: var(--footer); color: var(--footer-ink); border-top: 1px solid rgb(255 255 255 / .06); }
 /* Footer reveal: with html.foot-reveal (set in site.js when the footer fits on screen and motion is allowed)
-   the footer waits at the bottom of the window underneath the page, and the page lifts off it at the end.
-   The clip keeps the arrow rail, which is fixed to the window, inside the page so it lifts with it. */
-.foot-reveal main { position: relative; z-index: 1; background: var(--bg); clip-path: inset(0); }
+   the footer waits at the bottom of the window underneath the page, and the page lifts off it at the end. */
+.foot-reveal main { position: relative; z-index: 1; background: var(--bg); }
 .foot-reveal footer { position: sticky; bottom: 0; z-index: 0; }
 footer .wrap { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; padding-top: 56px; padding-bottom: 56px; }
 @media (max-width: 800px) { footer .wrap { grid-template-columns: 1fr 1fr; } }

@@ -131,9 +131,6 @@
   const topMark = document.body.insertAdjacentElement("afterbegin", Object.assign(document.createElement("div"), { className: "top-mark" }));
   new IntersectionObserver(([e]) => root.classList.toggle("is-scrolled", !e.isIntersecting)).observe(topMark);
 
-  /* ---------- Background flow rail (styled and animated in CSS) ---------- */
-  $("#main").insertAdjacentHTML("beforeend", '<div class="flow-rail" aria-hidden="true"><i></i><div class="flow-rail-fill"><div><i></i></div></div></div>');
-
   /* ---------- Footer reveal ---------- */
   // The footer waits under the page and is uncovered at the end, but only when it fits on screen with room to spare.
   const foot = $("footer"), calm = matchMedia("(prefers-reduced-motion: reduce)");

@@ -161,15 +161,17 @@ window.DEFIRO = {
     { title: "Minute 01", ms: "M1", date: "", url: "files/Minute01.pdf" },
     { title: "Minute 02", ms: "M1", date: "", url: "files/Minute02.pdf" },
     { title: "Minute 03", ms: "M1", date: "", url: "files/Minute03.pdf" },
+    { title: "Minute 04", ms: "M2", date: "", url: "files/Minute04.pdf" },
+    { title: "Minute 05", ms: "M2", date: "", url: "files/Minute05.pdf" },
   ],
 
 
   team: [
+    { name: "Bernardo Santos", initials: "BS", photo: "assets/team/bernardo.jpg", github: "a16166", linkedin: "https://www.linkedin.com/in/bernardo-santos-50a3a13b3" },
+    { name: "Daniel Rodrigues", initials: "DR", photo: "assets/team/daniel.jpg", github: "NXS2608", linkedin: "https://www.linkedin.com/in/daniel-rodr1/" },
+    { name: "Dinis Sousa", initials: "DS", photo: "assets/team/dinis.jpg", github: "dinis-sousa0", linkedin: "https://www.linkedin.com/in/dinissousa05/" },
     { name: "Duarte Candeias", initials: "DC", photo: "assets/team/candeias.jpg", github: "Candeias-ua", linkedin: "https://www.linkedin.com/in/duarte-candeias-554a85372" },
     { name: "Pedro Gonçalves", initials: "PG", photo: "assets/team/pedro.jpg", github: "pedroo-goncalves", linkedin: "https://www.linkedin.com/in/pedro-gon%C3%A7alves-a732a6429" },
-    { name: "Daniel Rodrigues", initials: "DR", photo: "assets/team/daniel.jpg", github: "NXS2608", linkedin: "https://www.linkedin.com/in/daniel-rodr1/" },
-    { name: "Bernardo Santos", initials: "BS", photo: "assets/team/bernardo.jpg", github: "a16166", linkedin: "https://www.linkedin.com/in/bernardo-santos-50a3a13b3" },
-    { name: "Dinis Sousa", initials: "DS", photo: "assets/team/dinis.jpg", github: "dinis-sousa0", linkedin: "https://www.linkedin.com/in/dinissousa05/" },
   ],
 
   advisors: [
