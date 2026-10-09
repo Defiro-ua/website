@@ -139,7 +139,8 @@ p { margin: 0; text-wrap: pretty; }
   .nav > a, .dd > button { width: 100%; min-height: 48px; padding: 10px 16px; border-radius: 16px; font-size: 16px; }
   .nav a[aria-current="page"], .dd.active > button { color: var(--accent-ink); background: var(--soft); }
   .dd > button .icon { display: none; }
-  .dd-menu { position: static; min-width: 0; border: 0; box-shadow: none; padding: 0 0 0 14px; background: none; opacity: 1; visibility: visible; transform: none; transition: none; }
+  /* The sub-links are always shown here, in place. Tapping Milestones must not apply the desktop offset. */
+  .dd-menu, .dd.open .dd-menu { position: static; min-width: 0; border: 0; box-shadow: none; padding: 0 0 0 14px; background: none; opacity: 1; visibility: visible; transform: none; transition: none; }
 }
 
 /* ---------- Background flow rail ---------- */
