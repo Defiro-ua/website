@@ -12,35 +12,48 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/style.css">
   <script>try{var t=localStorage.getItem("defiro-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script>var c=document.documentElement.classList;c.add("scene-js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches)c.add("scene-on")</script>
 </head>
 <body data-page="home">
 <a class="skip" href="#main">Skip to content</a>
 <div id="site-header"></div>
 
 <main id="main">
-  <section class="hero">
-    <div class="hero-glow" aria-hidden="true"></div>
-    <div class="wrap">
-      <h1>Your workflows, <span class="hl">without writing code.</span></h1>
-      <p class="lede">A workflow automation platform, adaptable to any scenario.</p>
-    </div>
-  </section>
+  <div class="scene" id="scene">
+    <div class="scene-pin">
+      <div class="scene-canvas">
+        <div class="scene-shapes" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
-  <section class="block soft" id="how">
-    <div class="wrap">
-      <h2 class="section-title">How it <span class="hl">works</span></h2>
-      <ol class="steps">
-        <li class="step"><span class="step-n">1</span><h3>Design</h3><p>Draw the workflow: steps, roles and the data each step needs.</p></li>
-        <li class="step"><span class="step-n">2</span><h3>Generate</h3><p>defiro builds the app: forms, inboxes, approvals and notifications.</p></li>
-        <li class="step"><span class="step-n">3</span><h3>Run</h3><p>Every request is tracked, every change recorded.</p></li>
-      </ol>
-    </div>
-  </section>
+        <section class="hero">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <div class="wrap">
+            <h1>Your workflows, <span class="hl">without writing code</span></h1>
+            <p class="lede">A workflow automation platform, adaptable to any scenario.</p>
+          </div>
+        </section>
 
+        <section class="block soft" id="how">
+          <div class="wrap">
+            <h2 class="section-title">How it <span class="hl">works</span></h2>
+            <ol class="steps">
+              <li class="step"><span class="step-ghost" aria-hidden="true">1</span><span class="step-n">1</span><h3>Design</h3><p>Draw the workflow: steps, roles and the data each step needs.</p></li>
+              <li class="step"><span class="step-ghost" aria-hidden="true">2</span><span class="step-n">2</span><h3>Generate</h3><p>defiro builds the app: forms, inboxes, approvals and notifications.</p></li>
+              <li class="step"><span class="step-ghost" aria-hidden="true">3</span><span class="step-n">3</span><h3>Run</h3><p>Every request is tracked, every change recorded.</p></li>
+            </ol>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
 </main>
 
 <div id="site-footer"></div>
 <script src="assets/data.js"></script>
 <script src="assets/site.js"></script>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/line.js"></script>
+<script src="assets/home.js"></script>
+<script>window.DEFIRO_SCENE||document.documentElement.classList.remove("scene-js","scene-on")</script>
 </body>
 </html>

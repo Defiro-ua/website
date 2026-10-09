@@ -33,16 +33,17 @@
   const msLinks = (D.milestones || []).map((m, i) => `<a href="milestones.html#${m.id}">M${i + 1} · ${esc(m.name)}</a>`).join("");
   $("#site-header").outerHTML = `
     <header class="site-header">
-      <div class="wrap">
-        <a class="brand" href="index.html"><img src="assets/logo.png" alt="defiro" width="110" height="34"></a>
+      <div class="island">
+        <a class="brand" href="index.html" translate="no"><img src="assets/logo.png" alt="defiro" width="110" height="34"></a>
         <nav class="nav" id="nav" aria-label="Main">
-          <a href="calendar.html"${cur("calendar")}>Calendar</a>
+          <span class="nav-pill" aria-hidden="true"></span>
+          <a href="calendar.html" data-nav="calendar"${cur("calendar")}>Calendar</a>
           <div class="dd${page === "milestones" ? " active" : ""}">
-            <button type="button" aria-expanded="false" aria-haspopup="true">Milestones ${icon("down")}</button>
+            <button type="button" data-nav="milestones" aria-expanded="false" aria-haspopup="true">Milestones ${icon("down")}</button>
             <div class="dd-menu">${msLinks}</div>
           </div>
-          <a href="reports.html"${cur("reports")}>Reports</a>
-          <a href="team.html"${cur("team")}>Team</a>
+          <a href="reports.html" data-nav="reports"${cur("reports")}>Reports</a>
+          <a href="team.html" data-nav="team"${cur("team")}>Team</a>
         </nav>
         <div class="tools">
           <a class="icon-btn" href="${REPO}" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository" title="GitHub repository">${icon("github")}</a>
@@ -56,7 +57,7 @@
     <footer>
       <div class="wrap">
         <div>
-          <div class="f-brand"><img src="assets/logo-branco.png" alt="defiro" width="130" height="45"></div>
+          <div class="f-brand" translate="no"><img src="assets/logo-branco.png" alt="defiro" width="130" height="45"></div>
           <p class="f-note">A workflow automation platform, adaptable to any scenario. Projeto em Engenharia Informática, Universidade de Aveiro.</p>
           <p class="f-note">PEI 2026/27 · Universidade de Aveiro</p>
         </div>
@@ -68,10 +69,12 @@
 
   /* ---------- Theme ---------- */
   const root = document.documentElement, themeBtn = $("#themeBtn");
+  const themeColor = document.head.appendChild(Object.assign(document.createElement("meta"), { name: "theme-color" }));
   const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
   const syncTheme = () => {
     themeBtn.innerHTML = icon(isDark() ? "sun" : "moon");
     themeBtn.setAttribute("aria-label", isDark() ? "Switch to light theme" : "Switch to dark theme");
+    themeColor.content = getComputedStyle(root).getPropertyValue("--bg").trim();
   };
   themeBtn.addEventListener("click", () => {
     root.dataset.theme = isDark() ? "light" : "dark";
@@ -95,51 +98,122 @@
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && dd.classList.contains("open")) { dd.classList.remove("open"); ddBtn.setAttribute("aria-expanded", "false"); ddBtn.focus(); } });
   nav.addEventListener("click", (e) => { if (e.target.closest("a")) { nav.classList.remove("open"); dd.classList.remove("open"); } });
 
+  /* ---------- Sliding highlight in the navbar ---------- */
+  // One pill rests under the current page's link and slides to whichever link is pointed at or focused.
+  // After a page change it slides in from the link of the page you came from.
+  const pill = $(".nav-pill"), items = [...nav.querySelectorAll("[data-nav]")], here = items.find((el) => el.dataset.nav === page);
+  const place = (el, animate = true) => {
+    items.forEach((it) => it.classList.toggle("is-under", it === el));
+    pill.classList.toggle("is-on", !!el);
+    if (!el) return;
+    let x = 0;
+    for (let n = el; n && n !== nav; n = n.offsetParent) x += n.offsetLeft;   // layout offsets: the island may be scaled
+    pill.classList.toggle("no-anim", !animate);
+    pill.style.setProperty("--x", x + "px");
+    pill.style.setProperty("--w", el.offsetWidth + "px");
+    if (!animate) { pill.offsetWidth; pill.classList.remove("no-anim"); }   // apply at once, then animate again
+  };
+  let from = null;
+  try { from = sessionStorage.getItem("defiro-nav"); sessionStorage.setItem("defiro-nav", page); } catch (e) {}
+  if (here) place(items.find((el) => el.dataset.nav === from) || here, false);
+  place(here);
+  items.forEach((el) => {
+    el.addEventListener("pointerenter", (e) => { if (e.pointerType !== "touch") place(el); });
+    el.addEventListener("focus", () => place(el));
+    el.addEventListener("blur", () => place(here));
+  });
+  nav.addEventListener("pointerleave", () => place(here));
+  addEventListener("resize", () => place(here, false));
+  if (document.fonts) document.fonts.ready.then(() => place(here, false));   // link widths change when the web font arrives
+
+  /* ---------- Has the page scrolled? ---------- */
+  // A marker at the very top of the page: while it is out of view the island is drawn smaller.
+  const topMark = document.body.insertAdjacentElement("afterbegin", Object.assign(document.createElement("div"), { className: "top-mark" }));
+  new IntersectionObserver(([e]) => root.classList.toggle("is-scrolled", !e.isIntersecting)).observe(topMark);
+
+  /* ---------- Background flow rail (styled and animated in CSS) ---------- */
+  $("#main").insertAdjacentHTML("beforeend", '<div class="flow-rail" aria-hidden="true"><i></i><div class="flow-rail-fill"><div><i></i></div></div></div>');
+
+  /* ---------- Footer reveal ---------- */
+  // The footer waits under the page and is uncovered at the end, but only when it fits on screen with room to spare.
+  const foot = $("footer"), calm = matchMedia("(prefers-reduced-motion: reduce)");
+  const fitFooter = () => root.classList.toggle("foot-reveal", !calm.matches && foot.offsetHeight < innerHeight * 0.8);
+  addEventListener("resize", fitFooter);
+  calm.addEventListener("change", fitFooter);
+  fitFooter();
+
   /* ---------- Calendar ---------- */
+  // A timeline: one section per milestone phase, one block per week. assets/page.js draws the thick line
+  // through the dots; the layout is in style.css under "Calendar".
   if ($("#calBody")) {
     const list = (items) => `<ul>${items.map((t) => `<li>${txt(t)}</li>`).join("")}</ul>`;
-    // The milestone label sits on the week marked `ms` (the one with the presentation), as in the team's calendar sheet.
-    $("#calBody").innerHTML = D.milestones.map((m, i) => m.calendar.map((c, j) => `
-      <tr${j === 0 && i > 0 ? ' class="first"' : ""}>
-        <td>${c.ms ? `<a href="milestones.html#${m.id}">M${i + 1} · ${esc(m.name)}</a>` : ""}</td>
-        <td>${txt(c.when)}</td>
-        <td>${(c.modules || []).map((b) => `<div class="cal-mod">Module: ${esc(b.name)}</div>${list(b.tasks)}`).join("")}${c.tasks ? list(c.tasks) : ""}</td>
-        <td>${c.deliverables ? list(c.deliverables) : ""}</td>
-      </tr>`).join("")).join("");
+    // Where a week falls relative to today, read from its "dd/mm - dd/mm" text. The year may follow each
+    // date; when it is left out it is the year in the milestone's own dates.
+    const today = new Date().setHours(0, 0, 0, 0);
+    const state = (when, year) => {
+      const d = [...when.matchAll(/(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?/g)].map((x) => new Date(+(x[3] || year), x[2] - 1, +x[1]).getTime());
+      if (!d.length) return "";
+      return d[d.length - 1] < today ? "past" : d[0] <= today ? "now" : "next";
+    };
+    const week = (c, year) => `
+      <div class="tl-week${c.ms ? " is-ms" : ""}" data-state="${state(c.when, year)}">
+        <span class="tl-dot spine-node" aria-hidden="true"></span>
+        <div class="tl-card reveal">
+          <h3 class="tl-when">${txt(c.when)} <span class="tl-now">Now</span></h3>
+          <div class="tl-body">${(c.modules || []).map((b) => `<div class="cal-mod">Module: ${esc(b.name)}</div>${list(b.tasks)}`).join("")}${c.tasks ? list(c.tasks) : ""}</div>
+          ${c.deliverables ? `<div class="tl-deliv"><div class="cal-mod">Deliverables</div>${list(c.deliverables)}</div>` : ""}
+        </div>
+      </div>`;
+    $("#calBody").innerHTML = D.milestones.map((m, i) => {
+      const year = (m.dates.match(/\d{4}/g) || [new Date().getFullYear()]).pop(), name = `M${i + 1} · ${esc(m.name)}`;
+      // The weeks up to the one marked `ms` (the one with the presentation) carry the milestone's name; it
+      // stays in view beside them and comes to rest at that week. Any weeks after it have no name.
+      const k = m.calendar.findIndex((c) => c.ms), cut = k < 0 ? 0 : k + 1;
+      const weeks = (from, to) => m.calendar.slice(from, to).map((c) => week(c, year)).join("");
+      return (cut ? `<section class="tl-phase" aria-label="${name}"><div class="tl-rail${k ? "" : " is-still"}" style="--rows:${Math.max(1, k)}"><h2 class="tl-label"><a href="milestones.html#${m.id}">${name}</a></h2></div>${weeks(0, cut)}</section>` : "")
+        + (cut < m.calendar.length ? `<section class="tl-phase">${weeks(cut)}</section>` : "");
+    }).join("");
   }
 
   /* ---------- Milestones ---------- */
+  // The tabs are dots on a line (assets/milestones.js draws it up to the selected one). They are built
+  // once; changing milestone only updates their state.
   if ($("#msTabs")) {
+    const tabs = $("#msTabs");
+    tabs.style.setProperty("--n", D.milestones.length);
+    tabs.innerHTML = D.milestones.map((x, k) => `<a href="#${x.id}"><span class="ms-dot" aria-hidden="true"></span><span class="ms-id">M${k + 1}</span><span class="ms-name">${esc(x.name)}</span></a>`).join("");
+    const links = [...tabs.querySelectorAll("a")];
     const show = () => {
       const id = (location.hash || "#m1").slice(1);
       const i = Math.max(0, D.milestones.findIndex((m) => m.id === id));
       const m = D.milestones[i];
       document.title = `M${i + 1} · ${m.name} | defiro`;
-      $("#msTabs").innerHTML = D.milestones.map((x, k) => `<a href="#${x.id}" aria-current="${k === i}">M${k + 1} · ${esc(x.name)}</a>`).join("");
+      links.forEach((a, k) => { a.setAttribute("aria-current", k === i); a.dataset.state = k < i ? "past" : k === i ? "now" : "next"; });
       $("#msTitle").innerHTML = `Milestone ${i + 1} - <span class="hl">${esc(m.name)}</span>`;
       $("#msMeta").textContent = m.dates;
       $("#msEmbed").innerHTML = m.slides
         ? `<iframe src="${esc(m.slides)}" title="M${i + 1} presentation" loading="lazy" allowfullscreen></iframe>`
         : `<div class="embed-empty">${icon("slides")}<span>The M${i + 1} presentation will be available soon.</span></div>`;
-      const links = [
+      const btns = [
         m.slides && `<a class="btn btn-primary" href="${esc(m.slides)}" target="_blank" rel="noopener noreferrer">${icon("slides")} Open slides</a>`,
         m.report && `<a class="btn btn-ghost" href="${esc(m.report)}" target="_blank" rel="noopener noreferrer">${icon("file")} Report</a>`,
       ].filter(Boolean);
-      $("#msLinks").innerHTML = links.join("");
-      $("#msLinks").hidden = !links.length;
+      $("#msLinks").innerHTML = btns.join("");
+      $("#msLinks").hidden = !btns.length;
     };
     addEventListener("hashchange", () => { show(); scrollTo(0, 0); });
     show();
   }
 
   /* ---------- Reports ---------- */
+  // assets/page.js runs the thick line down through the document icons.
   if ($("#repList")) {
     const openLink = (url, label) => url
       ? `<a class="open" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${label} ${icon("ext")}</a>`
       : `<span class="pending">Not yet published</span>`;
     $("#repList").innerHTML = D.reports.map((r) => `
-      <li class="doc">
-        <div class="doc-ico">${icon("file")}</div>
+      <li class="doc reveal">
+        <div class="doc-ico spine-node">${icon("file")}</div>
         <div><div class="doc-title">${txt(r.title)}</div><div class="doc-meta">${esc(r.ms)}${r.date ? " · " + fmt(r.date) : ""}</div></div>
         <div>${openLink(r.url, "PDF")}</div>
       </li>`).join("");
@@ -149,7 +223,7 @@
   if ($("#teamGrid")) {
     $("#teamGrid").innerHTML = D.team.map((m) => `
       <article class="member">
-        <div class="avatar" aria-hidden="true">${m.photo ? `<img src="${esc(m.photo)}" alt="" loading="lazy">` : esc(m.initials)}</div>
+        <div class="avatar" aria-hidden="true">${m.photo ? `<img src="${esc(m.photo)}" alt="" width="600" height="600" decoding="async">` : esc(m.initials)}</div>
         <h3>${esc(m.name)}</h3>
         <div class="links">
           ${m.github ? `<a class="icon-btn" href="https://github.com/${esc(m.github)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(m.name)} on GitHub">${icon("github")}</a>` : ""}
