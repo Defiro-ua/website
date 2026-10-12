@@ -33,20 +33,19 @@ window.DEFIRO = {
       calendar: [
         { when: "30/09 - 06/10", modules: [
           { name: "Requirements Elicitation", tasks: [
-            "Requirements gathering",
-            "User stories",
-            "Functional requirements",
-            "Non-functional requirements",
-            "Identify stakeholders & goals",
+            "Use cases (all)",
+            "Functional requirements (Bernardo)",
+            "Non-functional requirements (Dinis)",
+            "Identify stakeholders & goals (all)",
             "Map manual procedures (CMA context)",
           ] },
         ] },
         { ms: true, when: "07/10 - 13/10", modules: [
           { name: "System Architecture & Mock-ups", tasks: [
-            "Architecture design",
-            "Design mockups",
-            "Database diagrams",
-            "Presentation",
+            "Architecture design (Bernardo)",
+            "Design mockups (Duarte & Pedro)",
+            "Database diagrams (Daniel)",
+            "Presentation (all)",
           ] },
         ] },
       ],
