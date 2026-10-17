@@ -29,7 +29,7 @@ window.DEFIRO = {
     {
       id: "m2", name: "Elaboration", dates: "30 Sep - 13 Oct 2026", due: "2026-10-13",
       goal: "Settle the architecture and remove the biggest technical risks with a prototype.",
-      slides: "", report: "",
+      slides: "https://www.canva.com/design/DAHXgRr5Ef4/hFnEw8zjcKLzQ-1su5ix7A/view?embed", report: "",
       calendar: [
         { when: "30/09 - 06/10", modules: [
           { name: "Requirements Elicitation", tasks: [
