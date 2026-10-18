@@ -162,6 +162,9 @@ window.DEFIRO = {
     { title: "Minute 03", ms: "M1", date: "", url: "files/Minute03.pdf" },
     { title: "Minute 04", ms: "M2", date: "", url: "files/Minute04.pdf" },
     { title: "Minute 05", ms: "M2", date: "", url: "files/Minute05.pdf" },
+    { title: "Minute 06", ms: "M2", date: "", url: "files/Minute06.pdf" },
+    { title: "Minute 07", ms: "M2", date: "", url: "files/Minute07.pdf" },
+    { title: "Minute 08", ms: "M3", date: "", url: "files/Minute08.pdf" },
   ],
 
 
