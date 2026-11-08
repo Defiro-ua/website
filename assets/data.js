@@ -53,7 +53,7 @@ window.DEFIRO = {
     {
       id: "m3", name: "Construction", dates: "14 Oct - 3 Nov 2026", due: "2026-11-03",
       goal: "Build the core of the platform: workflow designer, lifecycle engine, forms and documents.",
-      slides: "", report: "",
+      slides: "https://www.canva.com/design/DAHZrAMr2e0/qjYiEHXXTCJM_FQH275tVg/view?embed", report: "",
       calendar: [
         { when: "14/10 - 20/10", modules: [
           { name: "Workflow Designer", tasks: [
