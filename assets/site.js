@@ -142,6 +142,7 @@
   /* ---------- Calendar ---------- */
   // A timeline: one section per milestone phase, one block per week. assets/page.js draws the thick line
   // through the dots; the layout is in style.css under "Calendar".
+  // A block is a module (`name`, shown as "Module: ...") or any other heading (`title`); its tasks are optional.
   if ($("#calBody")) {
     const list = (items) => `<ul>${items.map((t) => `<li>${txt(t)}</li>`).join("")}</ul>`;
     // Where a week falls relative to today, read from its "dd/mm - dd/mm" text. The year may follow each
@@ -157,7 +158,7 @@
         <span class="tl-dot spine-node" aria-hidden="true"></span>
         <div class="tl-card reveal">
           <h3 class="tl-when">${txt(c.when)} <span class="tl-now">Now</span></h3>
-          <div class="tl-body">${(c.modules || []).map((b) => `<div class="cal-mod">Module: ${esc(b.name)}</div>${list(b.tasks)}`).join("")}${c.tasks ? list(c.tasks) : ""}</div>
+          <div class="tl-body">${(c.modules || []).map((b) => `<div class="cal-mod">${b.title ? esc(b.title) : "Module: " + esc(b.name)}</div>${b.tasks ? list(b.tasks) : ""}`).join("")}${c.tasks ? list(c.tasks) : ""}</div>
           ${c.deliverables ? `<div class="tl-deliv"><div class="cal-mod">Deliverables</div>${list(c.deliverables)}</div>` : ""}
         </div>
       </div>`;

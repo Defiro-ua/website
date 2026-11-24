@@ -55,25 +55,11 @@ window.DEFIRO = {
       goal: "Build the core of the platform: workflow designer, lifecycle engine, forms and documents.",
       slides: "https://www.canva.com/design/DAHZrAMr2e0/qjYiEHXXTCJM_FQH275tVg/view?embed", report: "",
       calendar: [
-        { when: "14/10 - 20/10", modules: [
-          { name: "Workflow Designer", tasks: [
-            "UML diagram import & parsing",
-            "Diagram validation",
-          ] },
-        ] },
-        { when: "21/10 - 27/10", modules: [
-          { name: "Procedure & Document Lifecycle Engine", tasks: [
-            "State transition engine",
-            "Task assignment & deadlines",
-            "Audit trail / history",
-          ] },
-        ] },
-        { ms: true, when: "28/10 - 03/11", modules: [
-          { name: "Dynamic Forms & Documents", tasks: [
-            "Form generation from model",
-            "Document generation & export",
-            "Presentation",
-          ] },
+        { ms: true, when: "14/10 - 03/11", modules: [
+          { name: "Legal Requirements (Pedro & Dinis)" },
+          { name: "Usability & Accessibility (Daniel & Bernardo)", tasks: ["Usability testing with end users (all)"] },
+          { name: "Functional Requirements" },
+          { name: "UI/UX", tasks: ["Refine mockups (Duarte, Pedro & Bernardo)"] },
         ] },
       ],
     },
@@ -82,53 +68,47 @@ window.DEFIRO = {
       goal: "Integrate, validate with real users and hand the platform over.",
       slides: "", report: "",
       calendar: [
-        { when: "04/11 - 10/11", modules: [
-          { name: "Identity & Access Integration", tasks: [
-            "SSO (Entra ID) integration",
-            "Role & org-unit mapping",
-            "Approver delegation",
+        { when: "04/11 - 24/11", modules: [
+          { title: "Completed user stories", tasks: [
+            "UC01 Authenticate (SSO)",
+            "UC03 Create a workflow",
+            "UC04 Define the form fields of each step",
+            "UC05 Assign a group or unit to each step",
           ] },
         ] },
-        { when: "11/11 - 17/11", modules: [
-          { name: "Inbox, Notifications & Dashboard", tasks: [
-            "Task inbox",
-            "Notifications (email/in-app)",
-            "Metrics & dashboard",
+        { ms: true, when: "25/11 - 16/12", modules: [
+          { title: "Remaining user stories: request", tasks: [
+            "UC13 Start a procedure",
+            "UC15 Attach supporting files",
+            "UC20 Correct a returned document",
           ] },
-        ] },
-        { when: "19/11 - 24/11", modules: [
-          { name: "Reimbursement Module", tasks: [
-            "Request → approval → payment flow",
-            "Accounting system export",
+          { title: "Remaining user stories: review", tasks: [
+            "UC17 Approve a document",
+            "UC18 Reject a document",
+            "UC19 Add notes to a document",
           ] },
-        ] },
-        { when: "25/11 - 01/12", modules: [
-          { name: "Integration", tasks: [
-            "Connect Designer output → Lifecycle Engine",
-            "Connect Engine → Dynamic Forms",
-            "End-to-end tests",
+          { title: "Remaining user stories: closing", tasks: [
+            "UC22 Validate and close a procedure",
+            "UC23 Download a generated document",
+            "UC25 View a procedure's audit log and history",
           ] },
-        ] },
-        { when: "02/12 - 08/12", modules: [
-          { name: "Integration (continuation)", tasks: [
-            "Bug fixing after testing",
-            "Refine communication between modules",
+          { title: "Remaining user stories: inbox & deadlines", tasks: [
+            "UC06 Set legal deadlines for each step",
+            "UC27 View my task inbox",
           ] },
-        ] },
-        { ms: true, when: "09/12 - 16/12", tasks: ["Presentation", "Demo"] },
-        { when: "10/02/2027 - 23/02/2027", modules: [
+          { title: "Integration, end-to-end tests & presentation" },
+        ], deliverables: ["Complete MVP"] },
+        { when: "10/02/2027 - 03/03/2027", modules: [
           { name: "Second Procedure", tasks: [
             "Model second procedure as UML diagram",
             "Validate that the diagram is correctly parsed and interpreted by the engine",
           ] },
-        ] },
-        { when: "24/02/2027 - 09/03/2027", modules: [
           { name: "Plug-in Architecture Validation", tasks: [
             "Confirm the platform correctly generates the procedure (forms, tasks, lifecycle) from the user-created diagram",
             "Fix any gaps in the Workflow Designer/engine exposed by this second procedure",
           ] },
         ] },
-        { when: "10/03/2027 - 23/03/2027", modules: [
+        { when: "04/03/2027 - 23/03/2027", modules: [
           { name: "Refinement", tasks: [
             "Improve integration between modules",
             "Usability improvements to the Workflow Designer (based on feedback from modeling the second procedure)",
